@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="order.html" class="btn-order">Order Now</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+      <div id="auth-btn"></div>
+    </div>
+    <div class="hamburger"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>About Us</h1>
+    <p>The story behind Moshke's Schnitzel</p>
+  </section>
+
+  <!-- ABOUT SECTION -->
+  <section class="about-section">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-image">
+          <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+        </div>
+
+        <div class="about-content">
+          <h2 id="about-title">Cozy Comfort Food Since 2025</h2>
+          <p id="about-text-1">
+            Welcome to Moshke's Schnitzel — where every bite feels like home. 
+            We started with a simple idea: serve the most delicious, crispy, 
+            golden schnitzel in the most cozy and welcoming way possible.
+          </p>
+          <p id="about-text-2">
+            Every schnitzel is made fresh to order, with the finest ingredients 
+            and a whole lot of love. Whether you're picking up or ordering delivery, 
+            we make sure your food arrives hot, crispy, and absolutely delicious.
+          </p>
+          <div class="about-stats">
+            <div class="stat">
+              <h3 id="stat-1-number">2025</h3>
+              <p id="stat-1-label">Est.</p>
+            </div>
+            <div class="stat">
+              <h3 id="stat-2-number">100%</h3>
+              <p id="stat-2-label">Fresh Daily</p>
+            </div>
+            <div class="stat">
+              <h3 id="stat-3-number">❤️</h3>
+              <p id="stat-3-label">Made with Love</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VALUES SECTION -->
+      <div class="values-section">
+        <h2>Why Choose Us?</h2>
+        <div class="values-grid">
+          <div class="value-card">
+            <i class="fas fa-fire"></i>
+            <h3>Always Fresh</h3>
+            <p>Every order is made fresh, never frozen. You taste the difference.</p>
+          </div>
+          <div class="value-card">
+            <i class="fas fa-motorcycle"></i>
+            <h3>Fast Delivery</h3>
+            <p>Hot and crispy delivered straight to your door.</p>
+          </div>
+          <div class="value-card">
+            <i class="fas fa-heart"></i>
+            <h3>Made with Love</h3>
+            <p>Every schnitzel is prepared with care and passion.</p>
+          </div>
+          <div class="value-card">
+            <i class="fas fa-leaf"></i>
+            <h3>Quality Ingredients</h3>
+            <p>We use only the finest, freshest ingredients in every dish.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <img src="assets/logo.png" alt="Logo" class="footer-logo"/>
+          <p id="footer-about">Cozy comfort food made with love.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <p id="footer-phone"><i class="fas fa-phone"></i> Loading...</p>
+          <p id="footer-email"><i class="fas fa-envelope"></i> Loading...</p>
+          <p id="footer-whatsapp"><i class="fab fa-whatsapp"></i> Loading...</p>
+          <p id="footer-address"><i class="fas fa-map-marker-alt"></i> Loading...</p>
+        </div>
+        <div class="footer-col">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a id="footer-instagram" href="#"><i class="fab fa-instagram"></i></a>
+            <a id="footer-facebook" href="#"><i class="fab fa-facebook"></i></a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-bottom" id="footer-copyright">© 2025 Moshke's Schnitzel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/footer.js"></script>
+  <script src="js/auth-ui.js"></script>
+
+</body>
+</html>
