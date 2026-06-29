@@ -432,3 +432,151 @@ footer {
   background-color: var(--cream);
   color: var(--gold);
 }
+
+/* ===== LOGIN PAGE ===== */
+.login-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--dark-brown) 0%, var(--brown) 100%);
+  padding: 40px 20px;
+}
+
+.login-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 50px 40px;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.login-logo {
+  height: 90px;
+  margin-bottom: 20px;
+}
+
+.login-card h2 {
+  font-size: 32px;
+  color: var(--brown);
+  margin-bottom: 8px;
+}
+
+.login-subtitle {
+  color: #888;
+  font-size: 15px;
+  margin-bottom: 30px;
+}
+
+.btn-google {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  background: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s;
+  color: var(--text-dark);
+}
+
+.btn-google:hover {
+  border-color: var(--gold);
+  background: var(--cream);
+}
+
+.btn-google i {
+  color: #ea4335;
+  font-size: 18px;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin: 25px 0;
+  color: #aaa;
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.login-form input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid #eee;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  transition: border 0.3s;
+  outline: none;
+}
+
+.login-form input:focus {
+  border-color: var(--gold);
+}
+
+.btn-primary-full {
+  width: 100%;
+  padding: 14px;
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s;
+}
+
+.btn-primary-full:hover {
+  background: var(--light-gold);
+}
+
+.login-links {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  font-size: 14px;
+  color: #888;
+}
+
+.login-links a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.login-links a:hover {
+  color: var(--brown);
+}
+
+.error-msg {
+  background: #fff0f0;
+  color: #c0392b;
+  border: 1px solid #ffcccc;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}

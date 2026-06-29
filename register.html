@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Create Account — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="order.html" class="btn-order">Order Now</a></li>
+    </ul>
+    <div class="hamburger"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- REGISTER SECTION -->
+  <section class="login-section">
+    <div class="login-card">
+      <img src="assets/logo.png" alt="Logo" class="login-logo" />
+      <h2>Create Account</h2>
+      <p class="login-subtitle">Join us and start ordering! 🍽️</p>
+
+      <!-- ERROR MESSAGE -->
+      <div id="error-msg" class="error-msg" style="display:none;"></div>
+
+      <!-- GOOGLE SIGN UP -->
+      <button class="btn-google" onclick="signUpWithGoogle()">
+        <i class="fab fa-google"></i> Continue with Google
+      </button>
+
+      <div class="divider"><span>or</span></div>
+
+      <!-- REGISTER FORM -->
+      <div class="login-form">
+        <input type="text" id="name" placeholder="Full name" />
+        <input type="tel" id="phone" placeholder="Phone number" />
+        <input type="email" id="email" placeholder="Email address" />
+        <input type="password" id="password" placeholder="Password (min 6 characters)" />
+        <button class="btn-primary-full" onclick="registerWithEmail()">Create Account</button>
+      </div>
+
+      <div class="login-links">
+        <span>Already have an account?</span>
+        <a href="login.html">Sign In</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/register.js"></script>
+
+</body>
+</html>
