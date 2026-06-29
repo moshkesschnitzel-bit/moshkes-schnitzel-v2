@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="order.html" class="btn-order">Order Now</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+      <div id="auth-btn"></div>
+    </div>
+    <div class="hamburger"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>Your Cart</h1>
+    <p>Review your order before checkout</p>
+  </section>
+
+  <!-- CART SECTION -->
+  <section class="cart-section">
+    <div class="container">
+      <div class="cart-layout">
+
+        <!-- CART ITEMS -->
+        <div class="cart-items" id="cart-items">
+          <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i> Loading cart...
+          </div>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="cart-summary">
+          <h3>Order Summary</h3>
+
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="summary-subtotal">₪0</span>
+          </div>
+
+          <div class="summary-row" id="delivery-fee-row">
+            <span>Delivery Fee</span>
+            <span id="summary-delivery">₪0</span>
+          </div>
+
+          <div class="summary-row" id="cc-fee-row" style="display:none;">
+            <span>Credit Card Fee (12%)</span>
+            <span id="summary-cc-fee">₪0</span>
+          </div>
+
+          <div class="summary-row total">
+            <span>Total</span>
+            <span id="summary-total">₪0</span>
+          </div>
+
+          <div class="summary-row" id="usd-row" style="display:none;">
+            <span>Total in USD</span>
+            <span id="summary-usd">$0</span>
+          </div>
+
+          <!-- DELIVERY OR PICKUP -->
+          <div class="order-type-selector">
+            <h4>Order Type</h4>
+            <div class="order-type-btns">
+              <button class="type-btn active" onclick="selectOrderType('delivery')">
+                <i class="fas fa-motorcycle"></i> Delivery
+              </button>
+              <button class="type-btn" onclick="selectOrderType('pickup')">
+                <i class="fas fa-store"></i> Pickup
+              </button>
+            </div>
+          </div>
+
+          <!-- PAYMENT METHOD -->
+          <div class="payment-selector">
+            <h4>Payment Method</h4>
+            <div class="order-type-btns">
+              <button class="type-btn active" onclick="selectPayment('cash')">
+                <i class="fas fa-money-bill"></i> Cash
+              </button>
+              <button class="type-btn" onclick="selectPayment('card')">
+                <i class="fas fa-credit-card"></i> Credit Card
+              </button>
+            </div>
+          </div>
+
+          <!-- SPLIT PAYMENT -->
+          <div id="split-payment-section" style="display:none;">
+            <div class="split-toggle">
+              <label>
+                <input type="checkbox" id="split-toggle" onchange="toggleSplit()" />
+                Split payment between 2 people
+              </label>
+            </div>
+            <div id="split-details" style="display:none;">
+              <p class="split-info">Each person pays: <strong>₪<span id="split-amount">0</span></strong></p>
+              <p class="split-info-small">Order confirms only when both payments are received.</p>
+            </div>
+          </div>
+
+          <button class="btn-primary-full" onclick="proceedToCheckout()">
+            Proceed to Checkout <i class="fas fa-arrow-right"></i>
+          </button>
+
+          <a href="menu.html" class="continue-shopping">
+            <i class="fas fa-arrow-left"></i> Continue Shopping
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="container">
+      <p class="footer-bottom" id="footer-copyright">© 2025 Moshke's Schnitzel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/footer.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/cart.js"></script>
+
+</body>
+</html>
