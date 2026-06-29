@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/admin.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="admin-login" class="admin-login">
+    <div class="admin-login-card">
+      <img src="assets/logo.png" alt="Logo" class="login-logo" />
+      <h2>Admin Panel</h2>
+      <p>Sign in to manage your restaurant</p>
+      <div class="login-form">
+        <input type="email" id="admin-email" placeholder="Admin email" />
+        <input type="password" id="admin-password" placeholder="Password" />
+        <div id="admin-error" class="error-msg" style="display:none;"></div>
+        <button class="btn-primary-full" onclick="adminLogin()">Sign In</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="admin-panel" style="display:none;">
+
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-logo">
+        <img src="assets/logo.png" alt="Logo" />
+        <span>Admin Panel</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" onclick="showSection('dashboard')">
+          <i class="fas fa-chart-line"></i> Dashboard
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('orders')">
+          <i class="fas fa-receipt"></i> Orders
+          <span class="badge" id="new-orders-badge">0</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('menu')">
+          <i class="fas fa-utensils"></i> Menu Items
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('categories')">
+          <i class="fas fa-list"></i> Categories
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('specials')">
+          <i class="fas fa-star"></i> Special Offers
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('customers')">
+          <i class="fas fa-users"></i> Customers
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('messages')">
+          <i class="fas fa-envelope"></i> Messages
+          <span class="badge" id="new-messages-badge">0</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('store-settings')">
+          <i class="fas fa-store"></i> Store Settings
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('footer-settings')">
+          <i class="fas fa-edit"></i> Footer & Info
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('admin-management')">
+          <i class="fas fa-shield-alt"></i> Admin Access
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('admin-management')">
+          <i class="fas fa-shield-alt"></i> Admin Access
+        </a>
+      </nav>
+
+      <button class="btn-signout" onclick="adminSignOut()">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </button>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+
+      <!-- TOP BAR -->
+      <div class="admin-topbar">
+        <h2 id="section-title">Dashboard</h2>
+        <div class="store-status">
+          <span id="store-status-label">Store: Loading...</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="store-toggle" onchange="toggleStore()" />
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- DASHBOARD SECTION -->
+      <section id="section-dashboard" class="admin-section active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <i class="fas fa-receipt"></i>
+            <div>
+              <h3 id="stat-total-orders">0</h3>
+              <p>Total Orders</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-shekel-sign"></i>
+            <div>
+              <h3 id="stat-today-revenue">₪0</h3>
+              <p>Today's Revenue</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-calendar-week"></i>
+            <div>
+              <h3 id="stat-week-revenue">₪0</h3>
+              <p>This Week</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-calendar-alt"></i>
+            <div>
+              <h3 id="stat-month-revenue">₪0</h3>
+              <p>This Month</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <div>
+              <h3 id="stat-customers">0</h3>
+              <p>Total Customers</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <i class="fas fa-motorcycle"></i>
+            <div>
+              <h3 id="stat-delivery-revenue">₪0</h3>
+              <p>Delivery Fees</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT ORDERS -->
+        <div class="admin-card">
+          <h3>Recent Orders</h3>
+          <div id="recent-orders-list"></div>
+        </div>
+      </section>
+
+      <!-- ORDERS SECTION -->
+      <section id="section-orders" class="admin-section">
+        <div class="section-header">
+          <h3>All Orders</h3>
+          <select id="order-filter" onchange="filterOrders()">
+            <option value="all">All Orders</option>
+            <option value="pending">Pending</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready">Ready</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div id="orders-list"></div>
+      </section>
+
+      <!-- MENU SECTION -->
+      <section id="section-menu" class="admin-section">
+        <div class="section-header">
+          <h3>Menu Items</h3>
+          <button class="btn-add-new" onclick="showAddItemModal()">
+            <i class="fas fa-plus"></i> Add Item
+          </button>
+        </div>
+        <div id="menu-items-list"></div>
+      </section>
+
+      <!-- CATEGORIES SECTION -->
+      <section id="section-categories" class="admin-section">
+        <div class="section-header">
+          <h3>Categories</h3>
+          <button class="btn-add-new" onclick="showAddCategoryModal()">
+            <i class="fas fa-plus"></i> Add Category
+          </button>
+        </div>
+        <div id="categories-list"></div>
+      </section>
+
+      <!-- SPECIALS SECTION -->
+      <section id="section-specials" class="admin-section">
+        <div class="section-header">
+          <h3>Special Offers</h3>
+          <div class="specials-toggle">
+            <span>Show Specials on Site</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="specials-toggle" onchange="toggleSpecials()" />
+              <span class="slider"></span>
+            </label>
+          </div>
+          <button class="btn-add-new" onclick="showAddSpecialModal()">
+            <i class="fas fa-plus"></i> Add Special
+          </button>
+        </div>
+        <div id="specials-list"></div>
+      </section>
+
+      <!-- CUSTOMERS SECTION -->
+      <section id="section-customers" class="admin-section">
+        <div class="section-header">
+          <h3>All Customers</h3>
+          <input type="text" id="customer-search" placeholder="Search customers..." 
+                 oninput="searchCustomers()" class="search-input" />
+        </div>
+        <div id="customers-list"></div>
+      </section>
+
+      <!-- MESSAGES SECTION -->
+      <section id="section-messages" class="admin-section">
+        <h3>Customer Messages</h3>
+        <div id="messages-list"></div>
+      </section>
+
+      <!-- STORE SETTINGS SECTION -->
+      <section id="section-store-settings" class="admin-section">
+        <h3>Store Settings</h3>
+        <div class="settings-card">
+
+          <div class="setting-group">
+            <h4>Delivery Fee</h4>
+            <div class="setting-row">
+              <input type="number" id="delivery-fee-input" placeholder="e.g. 15" />
+              <button onclick="saveDeliveryFee()">Save</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <h4>Exchange Rate (ILS to USD)</h4>
+            <div class="setting-row">
+              <input type="number" id="exchange-rate-input" placeholder="e.g. 3.7" step="0.01" />
+              <button onclick="saveExchangeRate()">Save</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <h4>Opening Hours</h4>
+            <div id="hours-editor"></div>
+            <button class="btn-save-hours" onclick="saveHours()">
+              <i class="fas fa-save"></i> Save Hours
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- FOOTER SETTINGS SECTION -->
+      <section id="section-footer-settings" class="admin-section">
+        <h3>Footer & Contact Info</h3>
+        <div class="settings-card">
+          <div class="setting-group">
+            <label>About Text</label>
+            <input type="text" id="footer-about-input" placeholder="Short description..." />
+          </div>
+          <div class="setting-group">
+            <label>Phone Number</label>
+            <input type="text" id="footer-phone-input" placeholder="+972 50 000 0000" />
+          </div>
+          <div class="setting-group">
+            <label>Email</label>
+            <input type="email" id="footer-email-input" placeholder="info@moshkes.com" />
+          </div>
+          <div class="setting-group">
+            <label>WhatsApp</label>
+            <input type="text" id="footer-whatsapp-input" placeholder="+972 50 000 0000" />
+          </div>
+          <div class="setting-group">
+            <label>Address</label>
+            <input type="text" id="footer-address-input" placeholder="123 Street, City" />
+          </div>
+          <div class="setting-group">
+            <label>Instagram URL</label>
+            <input type="text" id="footer-instagram-input" placeholder="https://instagram.com/..." />
+          </div>
+          <div class="setting-group">
+            <label>Facebook URL</label>
+            <input type="text" id="footer-facebook-input" placeholder="https://facebook.com/..." />
+          </div>
+          <div class="setting-group">
+            <label>Copyright Text</label>
+            <input type="text" id="footer-copyright-input" placeholder="© 2025 Moshke's Schnitzel" />
+          </div>
+          <button class="btn-primary-full" onclick="saveFooterSettings()">
+            <i class="fas fa-save"></i> Save All Footer Settings
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ADMIN MANAGEMENT SECTION -->
+      <section id="section-admin-management" class="admin-section">
+        <h3>Admin Access Management</h3>
+        <div class="settings-card">
+
+          <div class="setting-group">
+            <h4>Add Admin User</h4>
+            <div class="setting-row">
+              <input type="email" id="new-admin-email" placeholder="Email address" />
+              <button onclick="addAdminUser()">Add</button>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <h4>Current Admin Users</h4>
+            <div id="admin-users-list"></div>
+          </div>
+
+          <div class="setting-group">
+            <h4>Change My Password</h4>
+            <div class="login-form" style="max-width:400px;">
+              <input type="password" id="new-password-1" placeholder="New password" />
+              <input type="password" id="new-password-2" placeholder="Confirm new password" />
+              <button class="btn-primary-full" onclick="changeAdminPassword()">
+                <i class="fas fa-lock"></i> Change Password
+              </button>
+            </div>
+            <div id="password-msg" style="margin-top:10px;display:none;"></div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ADD/EDIT ITEM MODAL -->
+  <div class="modal-overlay" id="item-modal" style="display:none;">
+    <div class="modal-card admin-modal">
+      <button class="modal-close" onclick="closeItemModal()"><i class="fas fa-times"></i></button>
+      <h3 id="item-modal-title">Add Menu Item</h3>
+      <div class="admin-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Item Name</label>
+            <input type="text" id="item-name" placeholder="e.g. Classic Schnitzel" />
+          </div>
+          <div class="form-group">
+            <label>Price (₪)</label>
+            <input type="number" id="item-price" placeholder="e.g. 45" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="item-desc" placeholder="Describe the item..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select id="item-category"></select>
+          </div>
+          <div class="form-group">
+            <label>Image URL or Cloudinary</label>
+            <input type="text" id="item-image" placeholder="https://..." />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="item-available" checked /> Available
+          </label>
+          <label style="margin-left:20px;">
+            <input type="checkbox" id="item-outofstock" /> Out of Stock
+          </label>
+        </div>
+
+        <!-- EXTRAS -->
+        <div class="form-group">
+          <h4>Extras (with price)</h4>
+          <div id="extras-list"></div>
+          <button class="btn-add-extra" onclick="addExtraField()">
+            <i class="fas fa-plus"></i> Add Extra
+          </button>
+        </div>
+
+        <!-- TOPPINGS -->
+        <div class="form-group">
+          <h4>Toppings</h4>
+          <div id="toppings-list"></div>
+          <button class="btn-add-extra" onclick="addToppingField()">
+            <i class="fas fa-plus"></i> Add Topping
+          </button>
+        </div>
+
+        <button class="btn-primary-full" onclick="saveMenuItem()">
+          <i class="fas fa-save"></i> Save Item
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>
