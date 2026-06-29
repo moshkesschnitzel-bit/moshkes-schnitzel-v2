@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Confirmed — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="order.html" class="btn-order">Order Now</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+      <div id="auth-btn"></div>
+    </div>
+    <div class="hamburger"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- CONFIRMATION SECTION -->
+  <section class="confirmation-section">
+    <div class="confirmation-card">
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h1>Order Confirmed! 🎉</h1>
+      <p class="confirmation-subtitle">Thank you for your order! We're preparing it now.</p>
+
+      <div class="order-number-box">
+        <p>Your Order Number</p>
+        <h2 id="order-number">MSK-000000</h2>
+      </div>
+
+      <div class="confirmation-details" id="confirmation-details">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <p class="confirmation-email-note">
+        <i class="fas fa-envelope"></i> A receipt has been sent to your email address.
+      </p>
+
+      <div class="confirmation-actions">
+        <a href="index.html" class="btn-primary">Back to Home</a>
+        <a href="menu.html" class="btn-secondary">Order More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="container">
+      <p class="footer-bottom" id="footer-copyright">© 2025 Moshke's Schnitzel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/footer.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/order-confirmation.js"></script>
+
+</body>
+</html>

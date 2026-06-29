@@ -1339,3 +1339,156 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== ORDER CONFIRMATION ===== */
+.confirmation-section {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--dark-brown), var(--brown));
+  padding: 40px 20px;
+}
+
+.confirmation-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 50px 40px;
+  width: 100%;
+  max-width: 580px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.confirmation-icon {
+  font-size: 70px;
+  color: #27ae60;
+  margin-bottom: 20px;
+}
+
+.confirmation-card h1 {
+  font-size: 36px;
+  color: var(--brown);
+  margin-bottom: 10px;
+}
+
+.confirmation-subtitle {
+  color: #888;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+.order-number-box {
+  background: var(--cream);
+  border: 2px dashed var(--gold);
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.order-number-box p {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.order-number-box h2 {
+  font-size: 32px;
+  color: var(--brown);
+  letter-spacing: 3px;
+}
+
+.confirmation-details {
+  text-align: left;
+  margin-bottom: 25px;
+}
+
+.confirmation-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #666;
+}
+
+.confirmation-row span:first-child {
+  font-weight: 600;
+  color: var(--brown);
+}
+
+.confirmation-row span:first-child i {
+  margin-right: 8px;
+  color: var(--gold);
+}
+
+.confirmation-row.total-row {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--brown);
+}
+
+.maps-link {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.maps-link:hover {
+  color: var(--brown);
+}
+
+.order-items-list {
+  margin-top: 20px;
+}
+
+.order-items-list h4 {
+  font-size: 16px;
+  color: var(--brown);
+  margin-bottom: 12px;
+}
+
+.confirmation-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #666;
+  padding: 8px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.confirmation-email-note {
+  font-size: 13px;
+  color: #888;
+  margin-bottom: 25px;
+}
+
+.confirmation-email-note i {
+  margin-right: 6px;
+  color: var(--gold);
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--gold);
+  color: var(--gold);
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+  background: var(--gold);
+  color: var(--white);
+}
