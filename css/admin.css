@@ -435,14 +435,45 @@ input:checked + .slider:before {
 
 .admin-section {
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.admin-section * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.admin-section input,
+.admin-section select,
+.admin-section textarea {
+  width: 100%;
 }
 
 .settings-card,
 .admin-card {
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
   overflow: hidden;
+}
+
+.settings-card *,
+.admin-card * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.setting-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.setting-row input {
+  flex: 1;
+  min-width: 150px;
 }
 
 .btn-add-new {
