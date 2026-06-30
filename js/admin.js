@@ -1,3 +1,7 @@
+// Cloudinary config
+const CLOUDINARY_CLOUD = 'dpylqw980';
+const CLOUDINARY_PRESET = 'moshkes-upload';
+
 let currentAdminUser = null;
 let editingItemId = null;
 let allOrders = [];
@@ -50,6 +54,7 @@ async function initAdmin() {
   loadFooterSettings();
   loadSpecials();
   loadAdminUsers();
+  loadGlobalToppings();
 }
 
 // ===== NAVIGATION =====
@@ -256,6 +261,9 @@ async function showAddItemModal() {
   document.getElementById('extras-list').innerHTML = '';
   document.getElementById('toppings-list').innerHTML = '';
   await loadCategoriesForSelect();
+  createImageUploader('item-image-uploader', (url) => {
+    document.getElementById('item-image').value = url;
+  });
   document.getElementById('item-modal').style.display = 'flex';
 }
 
@@ -279,6 +287,20 @@ async function editMenuItem(itemId) {
   if (item.toppings) item.toppings.forEach(t => addToppingField(t.name, t.price));
 
   await loadCategoriesForSelect(item.categoryId);
+  createImageUploader('item-image-uploader', (url) => {
+    document.getElementById('item-image').value = url;
+  });
+  // Show existing image preview
+  if (item.image) {
+    document.getElementById('item-image').value = item.image;
+    const preview = document.getElementById('upload-preview-item-image-uploader');
+    const dropzone = document.getElementById('dropzone-item-image-uploader');
+    if (preview && dropzone) {
+      document.getElementById('preview-img-item-image-uploader').src = item.image;
+      preview.style.display = 'block';
+      dropzone.style.display = 'none';
+    }
+  }
   document.getElementById('item-modal').style.display = 'flex';
 }
 
@@ -715,4 +737,148 @@ function showPasswordMsg(msg, type) {
   div.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
   div.style.fontWeight = '600';
   div.style.fontSize = '14px';
+}
+
+// ===== LIVE EXCHANGE RATE =====
+async function fetchLiveExchangeRate() {
+  try {
+    const response = await fetch('https://api.exchangerate-api.com/v4/latest/ILS');
+    const data = await response.json();
+    const usdRate = 1 / data.rates.USD;
+    document.getElementById('exchange-rate-input').value = usdRate.toFixed(4);
+    await db.collection('settings').doc('store').set(
+      { exchangeRate: parseFloat(usdRate.toFixed(4)) }, 
+      { merge: true }
+    );
+    alert(`✅ Live rate updated! 1 USD = ₪${usdRate.toFixed(4)}`);
+  } catch (error) {
+    alert('Could not fetch live rate. Please enter manually.');
+  }
+}
+
+// ===== CLOUDINARY IMAGE UPLOAD =====
+function createImageUploader(containerId, onUpload) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = `
+    <div class="image-uploader" id="uploader-${containerId}">
+      <div class="upload-drop-zone" id="dropzone-${containerId}">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <p>Drag & drop image here or click to browse</p>
+        <input type="file" accept="image/*" style="display:none;" 
+               id="file-input-${containerId}" />
+      </div>
+      <div id="upload-preview-${containerId}" style="display:none;">
+        <img id="preview-img-${containerId}" src="" style="max-height:150px;border-radius:10px;" />
+        <button onclick="clearImage('${containerId}')" class="btn-delete" 
+                style="margin-top:8px;padding:6px 12px;">
+          <i class="fas fa-times"></i> Remove
+        </button>
+      </div>
+      <div id="upload-progress-${containerId}" style="display:none;" class="upload-progress">
+        <i class="fas fa-spinner fa-spin"></i> Uploading...
+      </div>
+    </div>
+  `;
+
+  const dropzone = document.getElementById(`dropzone-${containerId}`);
+  const fileInput = document.getElementById(`file-input-${containerId}`);
+
+  dropzone.addEventListener('click', () => fileInput.click());
+  dropzone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropzone.classList.add('dragover');
+  });
+  dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+  dropzone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropzone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) uploadToCloudinary(file, containerId, onUpload);
+  });
+  fileInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) uploadToCloudinary(file, containerId, onUpload);
+  });
+}
+
+async function uploadToCloudinary(file, containerId, onUpload) {
+  const progress = document.getElementById(`upload-progress-${containerId}`);
+  const dropzone = document.getElementById(`dropzone-${containerId}`);
+  const preview = document.getElementById(`upload-preview-${containerId}`);
+
+  progress.style.display = 'block';
+  dropzone.style.display = 'none';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('cloud_name', CLOUDINARY_CLOUD);
+
+  try {
+    const response = await fetch(
+      `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,
+      { method: 'POST', body: formData }
+    );
+    const data = await response.json();
+    
+    progress.style.display = 'none';
+    preview.style.display = 'block';
+    document.getElementById(`preview-img-${containerId}`).src = data.secure_url;
+    onUpload(data.secure_url);
+  } catch (error) {
+    progress.style.display = 'none';
+    dropzone.style.display = 'block';
+    alert('Upload failed. Please try again.');
+  }
+}
+
+function clearImage(containerId) {
+  document.getElementById(`upload-preview-${containerId}`).style.display = 'none';
+  document.getElementById(`dropzone-${containerId}`).style.display = 'block';
+}
+
+// ===== GLOBAL TOPPINGS/EXTRAS/SAUCES MANAGER =====
+async function loadGlobalToppings() {
+  const snap = await db.collection('globalToppings').get();
+  const list = document.getElementById('global-toppings-list');
+  
+  if (snap.empty) {
+    list.innerHTML = '<p style="color:#888;">No toppings yet.</p>';
+    return;
+  }
+
+  list.innerHTML = snap.docs.map(doc => {
+    const t = doc.data();
+    return `
+      <div class="menu-item-row" style="padding:12px 15px;">
+        <div class="menu-item-info">
+          <h4>${t.name} <span style="color:#888;font-size:13px;">(${t.type})</span></h4>
+          ${t.price > 0 ? `<p>+₪${t.price}</p>` : '<p>Free</p>'}
+        </div>
+        <button class="btn-delete" onclick="deleteGlobalTopping('${doc.id}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+async function addGlobalTopping() {
+  const name = document.getElementById('new-topping-name').value.trim();
+  const price = parseFloat(document.getElementById('new-topping-price').value) || 0;
+  const type = document.getElementById('new-topping-type').value;
+
+  if (!name) { alert('Please enter a name.'); return; }
+
+  await db.collection('globalToppings').add({ name, price, type });
+  document.getElementById('new-topping-name').value = '';
+  document.getElementById('new-topping-price').value = '';
+  loadGlobalToppings();
+}
+
+async function deleteGlobalTopping(id) {
+  if (confirm('Delete this topping/extra/sauce?')) {
+    await db.collection('globalToppings').doc(id).delete();
+    loadGlobalToppings();
+  }
 }

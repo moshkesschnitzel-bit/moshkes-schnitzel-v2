@@ -887,3 +887,43 @@ input:checked + .slider:before {
   font-weight: 600;
   color: var(--brown);
 }
+
+/* ===== IMAGE UPLOADER ===== */
+.upload-drop-zone {
+  border: 2px dashed var(--gold);
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  background: #fffbf5;
+}
+
+.upload-drop-zone:hover,
+.upload-drop-zone.dragover {
+  background: #fff3dd;
+  border-color: var(--light-gold);
+}
+
+.upload-drop-zone i {
+  font-size: 35px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.upload-drop-zone p {
+  font-size: 14px;
+  color: #888;
+}
+
+.upload-progress {
+  text-align: center;
+  padding: 20px;
+  font-size: 15px;
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.upload-progress i {
+  margin-right: 8px;
+}

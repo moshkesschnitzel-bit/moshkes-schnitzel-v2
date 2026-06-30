@@ -53,6 +53,9 @@
         <a href="#" class="nav-item" onclick="showSection('specials')">
           <i class="fas fa-star"></i> Special Offers
         </a>
+        <a href="#" class="nav-item" onclick="showSection('toppings')">
+          <i class="fas fa-pepper-hot"></i> Toppings & Extras
+        </a>
         <a href="#" class="nav-item" onclick="showSection('customers')">
           <i class="fas fa-users"></i> Customers
         </a>
@@ -238,6 +241,9 @@
             <div class="setting-row">
               <input type="number" id="exchange-rate-input" placeholder="e.g. 3.7" step="0.01" />
               <button onclick="saveExchangeRate()">Save</button>
+              <button onclick="fetchLiveExchangeRate()" style="background:#27ae60;">
+                <i class="fas fa-sync"></i> Get Live Rate
+              </button>
             </div>
           </div>
 
@@ -297,7 +303,41 @@
     </main>
   </div>
 
-  <!-- ADMIN MANAGEMENT SECTION -->
+  <!-- TOPPINGS/EXTRAS/SAUCES SECTION -->
+      <section id="section-toppings" class="admin-section">
+        <div class="section-header">
+          <h3>Toppings, Extras & Sauces</h3>
+        </div>
+        <div class="settings-card">
+          <div class="setting-group">
+            <h4>Add New Topping / Extra / Sauce</h4>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <input type="text" id="new-topping-name" placeholder="Name (e.g. Pickles)" 
+                     style="flex:1;padding:12px;border:2px solid #eee;border-radius:10px;
+                            font-family:'Poppins',sans-serif;outline:none;" />
+              <input type="number" id="new-topping-price" placeholder="Price ₪ (0 = free)" 
+                     style="width:150px;padding:12px;border:2px solid #eee;border-radius:10px;
+                            font-family:'Poppins',sans-serif;outline:none;" />
+              <select id="new-topping-type" 
+                      style="padding:12px;border:2px solid #eee;border-radius:10px;
+                             font-family:'Poppins',sans-serif;outline:none;">
+                <option value="topping">Topping</option>
+                <option value="extra">Extra</option>
+                <option value="sauce">Sauce</option>
+              </select>
+              <button class="btn-add-new" onclick="addGlobalTopping()">
+                <i class="fas fa-plus"></i> Add
+              </button>
+            </div>
+          </div>
+          <div class="setting-group">
+            <h4>All Toppings, Extras & Sauces</h4>
+            <div id="global-toppings-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADMIN MANAGEMENT SECTION -->
       <section id="section-admin-management" class="admin-section">
         <h3>Admin Access Management</h3>
         <div class="settings-card">
@@ -356,8 +396,9 @@
             <select id="item-category"></select>
           </div>
           <div class="form-group">
-            <label>Image URL or Cloudinary</label>
-            <input type="text" id="item-image" placeholder="https://..." />
+            <label>Item Image</label>
+            <div id="item-image-uploader"></div>
+            <input type="hidden" id="item-image" />
           </div>
         </div>
         <div class="form-group">
