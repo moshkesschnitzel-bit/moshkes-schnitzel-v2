@@ -218,7 +218,7 @@ html, body {
   overflow-x: hidden;
   background: var(--bg);
   display: block;
-  width: auto;
+  width: calc(100% - 260px);
 }
 
 @media (max-width: 1024px) {
