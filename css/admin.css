@@ -413,12 +413,26 @@ input:checked + .slider:before {
   gap: 15px;
   margin-bottom: 25px;
   flex-wrap: wrap;
+  width: 100%;
 }
 
 .section-header h3 {
   font-size: 22px;
   color: var(--brown);
   margin-right: auto;
+  white-space: nowrap;
+}
+
+.admin-section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.settings-card,
+.admin-card {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .btn-add-new {
