@@ -18,7 +18,8 @@ function adminLogin() {
       if (userDoc.exists && userDoc.data().active) {
         currentAdminUser = result.user;
         document.getElementById('admin-login').style.display = 'none';
-        document.getElementById('admin-panel').style.display = 'flex';
+        document.getElementById('admin-sidebar-el').style.display = 'flex';
+        document.getElementById('admin-panel').style.display = 'block';
         initAdmin();
       } else {
         showAdminError('You do not have admin access.');
