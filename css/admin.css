@@ -353,7 +353,10 @@ input:checked + .slider:before {
 /* ===== SECTIONS ===== */
 .admin-section {
   display: none;
-  padding: 30px;
+  padding: 20px 25px;
+  max-width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .admin-section.active {
@@ -836,21 +839,25 @@ input:checked + .slider:before {
 .hours-row-editor {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 12px;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .hours-row-editor span {
-  width: 100px;
+  width: 90px;
   font-weight: 600;
   color: var(--brown);
-  font-size: 14px;
+  font-size: 13px;
+  flex-shrink: 0;
 }
 
 .hours-row-editor input {
-  width: 130px !important;
-  padding: 8px 12px !important;
+  width: 110px !important;
+  max-width: 110px !important;
+  padding: 8px 10px !important;
+  flex-shrink: 1;
 }
 
 .btn-save-hours {
