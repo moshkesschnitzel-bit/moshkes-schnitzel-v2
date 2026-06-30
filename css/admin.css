@@ -1043,3 +1043,19 @@ input:checked + .slider:before {
 .upload-progress i {
   margin-right: 8px;
 }
+
+/* ===== FORCE FIX ALL OVERFLOW ===== */
+.admin-section,
+.admin-section > *,
+.settings-card,
+.admin-card,
+.section-header,
+#admin-panel,
+.admin-main {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.admin-main {
+  overflow-x: auto !important;
+}
