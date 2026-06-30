@@ -453,10 +453,10 @@ input:checked + .slider:before {
 
 .settings-card,
 .admin-card {
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
 }
 
 .settings-card *,
