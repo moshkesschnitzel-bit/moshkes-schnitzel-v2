@@ -211,20 +211,14 @@ html, body {
 
 /* ===== MAIN CONTENT ===== */
 .admin-main {
-  position: fixed;
-  left: var(--sidebar-width);
-  right: 0;
-  top: 0;
-  bottom: 0;
+  margin-left: 260px;
+  min-height: 100vh;
   padding: 0;
   box-sizing: border-box;
-  overflow-y: scroll;
   overflow-x: hidden;
   background: var(--bg);
-}
-
-.admin-section {
-  min-height: 200px;
+  display: block;
+  width: auto;
 }
 
 @media (max-width: 1024px) {
