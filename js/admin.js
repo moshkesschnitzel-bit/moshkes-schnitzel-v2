@@ -56,6 +56,7 @@ async function initAdmin() {
   loadAdminUsers();
   loadGlobalToppings();
   loadHeroImage();
+  loadCategoryBoxesAdmin();
 }
 
 // ===== NAVIGATION =====
@@ -913,4 +914,70 @@ async function saveHeroImage() {
   }
   await db.collection('settings').doc('hero').set({ image: url }, { merge: true });
   alert('✅ Hero image saved!');
+}
+
+// ===== CATEGORY BOXES =====
+async function loadCategoryBoxesAdmin() {
+  const snap = await db.collection('categoryBoxes').orderBy('order').get();
+  const list = document.getElementById('category-boxes-list');
+
+  if (snap.empty) {
+    list.innerHTML = '<p style="color:#888;padding:20px;">No category boxes yet.</p>';
+    return;
+  }
+
+  list.innerHTML = snap.docs.map(doc => {
+    const box = doc.data();
+    return `
+      <div class="menu-item-row">
+        <img src="${box.image || 'assets/placeholder.jpg'}" alt="${box.name}" />
+        <div class="menu-item-info">
+          <h4>${box.name}</h4>
+        </div>
+        <div class="menu-item-actions">
+          <button class="btn-delete" onclick="deleteCategoryBox('${doc.id}')">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function showAddCategoryBoxModal() {
+  document.getElementById('catbox-name').value = '';
+  document.getElementById('catbox-image-url').value = '';
+  createImageUploader('catbox-image-uploader', (url) => {
+    document.getElementById('catbox-image-url').value = url;
+  });
+  document.getElementById('category-box-modal').style.display = 'flex';
+}
+
+function closeCategoryBoxModal() {
+  document.getElementById('category-box-modal').style.display = 'none';
+}
+
+async function saveCategoryBox() {
+  const name = document.getElementById('catbox-name').value.trim();
+  const image = document.getElementById('catbox-image-url').value;
+
+  if (!name) {
+    alert('Please enter a name.');
+    return;
+  }
+
+  const snap = await db.collection('categoryBoxes').get();
+  await db.collection('categoryBoxes').add({
+    name, image, order: snap.size + 1, link: 'menu.html'
+  });
+
+  closeCategoryBoxModal();
+  loadCategoryBoxesAdmin();
+}
+
+async function deleteCategoryBox(id) {
+  if (confirm('Delete this category box?')) {
+    await db.collection('categoryBoxes').doc(id).delete();
+    loadCategoryBoxesAdmin();
+  }
 }

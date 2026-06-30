@@ -56,6 +56,9 @@
         <a href="#" class="nav-item" onclick="showSection('toppings')">
           <i class="fas fa-pepper-hot"></i> Toppings & Extras
         </a>
+        <a href="#" class="nav-item" onclick="showSection('category-boxes')">
+          <i class="fas fa-th-large"></i> Category Boxes
+        </a>
         <a href="#" class="nav-item" onclick="showSection('customers')">
           <i class="fas fa-users"></i> Customers
         </a>
@@ -325,7 +328,40 @@
     </main>
   </div>
 
-  <!-- TOPPINGS/EXTRAS/SAUCES SECTION -->
+  <!-- CATEGORY BOXES SECTION -->
+      <section id="section-category-boxes" class="admin-section">
+        <div class="section-header">
+          <h3>Homepage Category Boxes</h3>
+          <button class="btn-add-new" onclick="showAddCategoryBoxModal()">
+            <i class="fas fa-plus"></i> Add Category Box
+          </button>
+        </div>
+        <div id="category-boxes-list"></div>
+      </section>
+
+      <!-- ADD CATEGORY BOX MODAL -->
+      <div class="modal-overlay" id="category-box-modal" style="display:none;">
+        <div class="modal-card admin-modal">
+          <button class="modal-close" onclick="closeCategoryBoxModal()"><i class="fas fa-times"></i></button>
+          <h3>Add Category Box</h3>
+          <div class="admin-form">
+            <div class="form-group">
+              <label>Box Name (e.g. Drinks, Sides, Schnitzels)</label>
+              <input type="text" id="catbox-name" placeholder="e.g. Drinks" />
+            </div>
+            <div class="form-group">
+              <label>Box Image</label>
+              <div id="catbox-image-uploader"></div>
+              <input type="hidden" id="catbox-image-url" />
+            </div>
+            <button class="btn-primary-full" onclick="saveCategoryBox()">
+              <i class="fas fa-save"></i> Save Category Box
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOPPINGS/EXTRAS/SAUCES SECTION -->
       <section id="section-toppings" class="admin-section">
         <div class="section-header">
           <h3>Toppings, Extras & Sauces</h3>
