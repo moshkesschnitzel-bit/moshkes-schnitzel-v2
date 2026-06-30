@@ -66,6 +66,9 @@
         <a href="#" class="nav-item" onclick="showSection('store-settings')">
           <i class="fas fa-store"></i> Store Settings
         </a>
+        <a href="#" class="nav-item" onclick="showSection('hero-image')">
+          <i class="fas fa-image"></i> Hero Image
+        </a>
         <a href="#" class="nav-item" onclick="showSection('footer-settings')">
           <i class="fas fa-edit"></i> Footer & Info
         </a>
@@ -255,6 +258,25 @@
             </button>
           </div>
 
+        </div>
+      </section>
+
+      <!-- HERO IMAGE SECTION -->
+      <section id="section-hero-image" class="admin-section">
+        <h3>Hero Image</h3>
+        <div class="settings-card">
+          <div class="setting-group">
+            <h4>Homepage Hero Background Image</h4>
+            <p style="color:#888;font-size:14px;margin-bottom:15px;">
+              This image appears as the background of the main hero section on the homepage.
+              Best size: 1920x1080px
+            </p>
+            <div id="hero-image-uploader"></div>
+            <input type="hidden" id="hero-image-url" />
+          </div>
+          <button class="btn-primary-full" onclick="saveHeroImage()">
+            <i class="fas fa-save"></i> Save Hero Image
+          </button>
         </div>
       </section>
 

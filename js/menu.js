@@ -25,17 +25,16 @@ async function loadMenu() {
       filterContainer.appendChild(btn);
     });
 
-    // Load menu items
-    const itemsSnap = await db.collection('menuItems')
+    // Load menu items with real-time updates
+    db.collection('menuItems')
       .where('available', '==', true)
-      .get();
-
-    allItems = [];
-    itemsSnap.forEach(doc => {
-      allItems.push({ id: doc.id, ...doc.data() });
-    });
-
-    renderMenu(allItems);
+      .onSnapshot(snapshot => {
+        allItems = [];
+        snapshot.forEach(doc => {
+          allItems.push({ id: doc.id, ...doc.data() });
+        });
+        renderMenu(allItems);
+      });
 
   } catch (error) {
     console.log('Menu loading error:', error);

@@ -55,6 +55,7 @@ async function initAdmin() {
   loadSpecials();
   loadAdminUsers();
   loadGlobalToppings();
+  loadHeroImage();
 }
 
 // ===== NAVIGATION =====
@@ -881,4 +882,32 @@ async function deleteGlobalTopping(id) {
     await db.collection('globalToppings').doc(id).delete();
     loadGlobalToppings();
   }
+}
+
+// ===== HERO IMAGE =====
+async function loadHeroImage() {
+  const doc = await db.collection('settings').doc('hero').get();
+  createImageUploader('hero-image-uploader', (url) => {
+    document.getElementById('hero-image-url').value = url;
+  });
+  if (doc.exists && doc.data().image) {
+    document.getElementById('hero-image-url').value = doc.data().image;
+    const preview = document.getElementById('upload-preview-hero-image-uploader');
+    const dropzone = document.getElementById('dropzone-hero-image-uploader');
+    if (preview && dropzone) {
+      document.getElementById('preview-img-hero-image-uploader').src = doc.data().image;
+      preview.style.display = 'block';
+      dropzone.style.display = 'none';
+    }
+  }
+}
+
+async function saveHeroImage() {
+  const url = document.getElementById('hero-image-url').value;
+  if (!url) {
+    alert('Please upload an image first.');
+    return;
+  }
+  await db.collection('settings').doc('hero').set({ image: url }, { merge: true });
+  alert('✅ Hero image saved!');
 }
