@@ -211,14 +211,16 @@ html, body {
 
 /* ===== MAIN CONTENT ===== */
 .admin-main {
-  position: absolute;
+  position: fixed;
   left: var(--sidebar-width);
   right: 0;
   top: 0;
-  min-height: 100vh;
+  bottom: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-y: auto;
   overflow-x: hidden;
+  background: var(--bg);
 }
 
 @media (max-width: 1024px) {
