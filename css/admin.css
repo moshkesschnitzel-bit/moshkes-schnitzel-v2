@@ -211,12 +211,14 @@ html, body {
 
 /* ===== MAIN CONTENT ===== */
 .admin-main {
-  margin-left: var(--sidebar-width);
-  width: calc(100% - var(--sidebar-width));
+  position: absolute;
+  left: var(--sidebar-width);
+  right: 0;
+  top: 0;
+  min-height: 100vh;
   padding: 0;
-  min-width: 0;
-  overflow-x: hidden;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 @media (max-width: 1024px) {
