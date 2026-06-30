@@ -139,13 +139,16 @@ async function loadDashboard() {
 }
 
 // ===== ORDERS =====
-async function loadOrders() {
-  const snap = await db.collection('orders').orderBy('createdAt', 'desc').get();
-  allOrders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  renderOrders(allOrders);
+function loadOrders() {
+  db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snap => {
+    allOrders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderOrders(allOrders);
 
-  const pending = allOrders.filter(o => o.status === 'pending').length;
-  document.getElementById('new-orders-badge').textContent = pending;
+    const pending = allOrders.filter(o => o.status === 'pending').length;
+    document.getElementById('new-orders-badge').textContent = pending;
+    
+    loadDashboard();
+  });
 }
 
 function renderOrders(orders) {

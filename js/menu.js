@@ -7,11 +7,14 @@ let selectedToppings = [];
 // Load menu from Firebase
 async function loadMenu() {
   try {
-    // Check if store is open
-    const storeDoc = await db.collection('settings').doc('store').get();
-    if (storeDoc.exists && storeDoc.data().isOpen === false) {
-      document.getElementById('store-closed-banner').style.display = 'block';
-    }
+    // Check if store is open (real-time)
+    db.collection('settings').doc('store').onSnapshot(storeDoc => {
+      if (storeDoc.exists && storeDoc.data().isOpen === false) {
+        document.getElementById('store-closed-banner').style.display = 'block';
+      } else {
+        document.getElementById('store-closed-banner').style.display = 'none';
+      }
+    });
 
     // Load categories
     const categoriesSnap = await db.collection('categories').orderBy('order').get();
