@@ -206,6 +206,19 @@ async function placeOrder() {
       name, phone, address: fullAddress
     });
 
+    // Send order receipt email
+    await sendOrderReceipt({
+      orderNumber,
+      customerName: name,
+      customerEmail: currentUser.email,
+      items: cart,
+      orderType: orderSummary.orderType,
+      paymentMethod: orderSummary.paymentMethod,
+      deliveryAddress: fullAddress,
+      total: orderSummary.total,
+      usdTotal: orderSummary.usdTotal
+    });
+
     // Save order number for confirmation page
     localStorage.setItem('lastOrderNumber', orderNumber);
     localStorage.setItem('lastOrderId', orderRef.id);

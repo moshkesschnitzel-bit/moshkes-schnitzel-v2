@@ -76,11 +76,7 @@ async function saveUserToFirestore(user, name, phone) {
   }
 }
 
-// Send welcome email (via EmailJS - we'll set this up later)
-async function sendWelcomeEmail(email, name) {
-  // EmailJS will be configured in a later step
-  console.log('Welcome email will be sent to:', email);
-}
+// Welcome email is handled by email.js
 
 // Show error/success message
 function showError(message) {
