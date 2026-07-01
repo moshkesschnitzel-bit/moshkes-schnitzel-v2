@@ -175,8 +175,9 @@ input:checked + .slider { background: #27ae60; }
 input:checked + .slider:before { transform: translateX(28px); }
 
 /* ===== SECTIONS ===== */
-.admin-section { display: none; padding: 25px 30px; }
-.admin-section.active { display: block; }
+.admin-section { display: none; padding: 25px 30px; box-sizing: border-box; width: 100%; }
+.admin-section.active { display: block; box-sizing: border-box; width: 100%; }
+.settings-card { box-sizing: border-box; width: 100%; }
 
 /* ===== STATS GRID ===== */
 .stats-grid {
