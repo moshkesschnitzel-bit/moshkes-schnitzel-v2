@@ -15,7 +15,8 @@ async function sendWelcomeEmail(email, name) {
       name: name || 'Friend',
       message: 'We\'re so happy to have you! Get ready for the most delicious schnitzel experience. Browse our menu and place your first order!',
       details: '<p style="text-align:center;color:#c8860a;font-size:18px;font-weight:700;">Cozy Comfort Food — Est. 2025 🍽️</p>',
-      to_email: email
+      to_email: email,
+      reply_to: email
     });
     console.log('Welcome email sent!');
   } catch (error) {
