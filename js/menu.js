@@ -129,20 +129,42 @@ async function openModal(itemId) {
     });
   }
 
-  // Load toppings
+  // Load global toppings & sauces (skip for drinks)
   const toppingsDiv = document.getElementById('modal-toppings');
   toppingsDiv.innerHTML = '';
-  if (item.toppings && item.toppings.length > 0) {
-    toppingsDiv.innerHTML = '<h4>Toppings</h4>';
-    item.toppings.forEach((topping, index) => {
-      toppingsDiv.innerHTML += `
-        <label class="extra-option">
-          <input type="checkbox" onchange="toggleTopping(${index})" />
-          ${topping.name} 
-          ${topping.price > 0 ? `<span>+₪${topping.price}</span>` : '<span>Free</span>'}
-        </label>
-      `;
-    });
+  const globalSnap = await db.collection('globalToppings').get();
+  const globalToppings = [];
+  globalSnap.forEach(doc => globalToppings.push({ id: doc.id, ...doc.data() }));
+  
+  if (globalToppings.length > 0 && item.categoryId !== 'drinks') {
+    const toppingsList = globalToppings.filter(t => t.type === 'topping');
+    const saucesList = globalToppings.filter(t => t.type === 'sauce');
+    
+    if (toppingsList.length > 0) {
+      toppingsDiv.innerHTML += '<h4>Toppings</h4>';
+      toppingsList.forEach((topping, index) => {
+        toppingsDiv.innerHTML += `
+          <label class="extra-option">
+            <input type="checkbox" onchange="toggleGlobalTopping('${topping.id}', '${topping.name}', ${topping.price})" />
+            ${topping.name}
+            ${topping.price > 0 ? `<span>+₪${topping.price}</span>` : '<span>Free</span>'}
+          </label>
+        `;
+      });
+    }
+    
+    if (saucesList.length > 0) {
+      toppingsDiv.innerHTML += '<h4>Sauces</h4>';
+      saucesList.forEach((sauce, index) => {
+        toppingsDiv.innerHTML += `
+          <label class="extra-option">
+            <input type="checkbox" onchange="toggleGlobalTopping('${sauce.id}', '${sauce.name}', ${sauce.price})" />
+            ${sauce.name}
+            ${sauce.price > 0 ? `<span>+₪${sauce.price}</span>` : '<span>Free</span>'}
+          </label>
+        `;
+      });
+    }
   }
 
   document.getElementById('item-modal').style.display = 'flex';
@@ -174,6 +196,28 @@ function toggleTopping(index) {
     selectedToppings.splice(idx, 1);
   } else {
     selectedToppings.push(topping);
+  }
+  updateModalTotal();
+}
+
+// Toggle global topping/sauce
+function toggleGlobalTopping(id, name, price) {
+  const idx = selectedToppings.findIndex(t => t.name === name);
+  if (idx > -1) {
+    selectedToppings.splice(idx, 1);
+  } else {
+    selectedToppings.push({ id, name, price: parseFloat(price) || 0 });
+  }
+  updateModalTotal();
+}
+
+// Toggle global topping/sauce
+function toggleGlobalTopping(id, name, price) {
+  const idx = selectedToppings.findIndex(t => t.name === name);
+  if (idx > -1) {
+    selectedToppings.splice(idx, 1);
+  } else {
+    selectedToppings.push({ id, name, price: parseFloat(price) || 0 });
   }
   updateModalTotal();
 }
