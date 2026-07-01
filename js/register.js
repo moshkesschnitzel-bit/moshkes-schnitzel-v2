@@ -41,13 +41,8 @@ async function registerWithEmail() {
     const result = await auth.createUserWithEmailAndPassword(email, password);
     const user = result.user;
 
-    // Update display name
     await user.updateProfile({ displayName: name });
-
-    // Save to Firestore
     await saveUserToFirestore(user, name, phone);
-
-    // Send welcome email
     await sendWelcomeEmail(email, name);
 
     window.location.href = 'index.html';
@@ -64,7 +59,6 @@ async function registerWithEmail() {
 async function saveUserToFirestore(user, name, phone) {
   const userRef = db.collection('users').doc(user.uid);
   const doc = await userRef.get();
-  
   if (!doc.exists) {
     await userRef.set({
       name: name || user.displayName || '',
@@ -75,8 +69,6 @@ async function saveUserToFirestore(user, name, phone) {
     });
   }
 }
-
-// Welcome email is handled by email.js
 
 // Show error/success message
 function showError(message) {
