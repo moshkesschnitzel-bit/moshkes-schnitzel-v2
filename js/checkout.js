@@ -173,7 +173,7 @@ async function placeOrder() {
 
   try {
     // Generate order number
-    const orderNumber = 'MSK-' + Date.now().toString().slice(-6);
+    const orderNumber = Math.floor(10000 + Math.random() * 90000).toString();
 
     // Full delivery address
     const fullAddress = apt ? `${address}, ${apt}` : address;

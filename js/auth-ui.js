@@ -10,7 +10,7 @@ function updateAuthUI(user) {
              alt="Profile" class="user-avatar" />
         <div class="user-dropdown">
           <p class="user-name">${user.displayName || user.email}</p>
-          <a href="profile.html">My Orders</a>
+          <a href="profile.html">My Profile & Orders</a>
           <a href="#" onclick="signOut()">Sign Out</a>
         </div>
       </div>

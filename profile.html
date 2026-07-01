@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile — Moshke's Schnitzel</title>
+  <link rel="icon" href="assets/logo.png" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-logo">
+      <img src="assets/logo.png" alt="Moshke's Schnitzel" />
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="menu.html" class="btn-order">Order Now</a></li>
+    </ul>
+    <div class="nav-icons">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i><span class="cart-count">0</span></a>
+      <div id="auth-btn"></div>
+    </div>
+    <div class="hamburger"><i class="fas fa-bars"></i></div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <h1>My Profile</h1>
+    <p>Manage your account and orders</p>
+  </section>
+
+  <!-- PROFILE SECTION -->
+  <section class="profile-section">
+    <div class="container">
+      <div class="profile-layout">
+
+        <!-- PROFILE INFO -->
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar" id="profile-avatar">?</div>
+            <div>
+              <h2 id="profile-name">Loading...</h2>
+              <p id="profile-email-display">Loading...</p>
+            </div>
+          </div>
+
+          <h3>Personal Information</h3>
+          <div class="login-form">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" id="profile-name-input" placeholder="Your full name" />
+            </div>
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input type="tel" id="profile-phone-input" placeholder="Your phone number" />
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="profile-email-input" placeholder="Your email" readonly />
+            </div>
+            <div class="form-group">
+              <label>Delivery Address</label>
+              <input type="text" id="profile-address-input" placeholder="Your delivery address" />
+            </div>
+            <button class="btn-primary-full" onclick="saveProfile()">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+            <div id="profile-msg" style="display:none;margin-top:10px;"></div>
+          </div>
+        </div>
+
+        <!-- MY ORDERS -->
+        <div class="orders-card">
+          <h3>My Orders</h3>
+          <div id="my-orders-list">
+            <div class="loading-spinner">
+              <i class="fas fa-spinner fa-spin"></i> Loading orders...
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="container">
+      <p class="footer-bottom" id="footer-copyright">© 2025 Moshke's Schnitzel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/footer.js"></script>
+  <script src="js/auth-ui.js"></script>
+  <script src="js/profile.js"></script>
+
+</body>
+</html>

@@ -1838,3 +1838,150 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== PROFILE PAGE ===== */
+.profile-section {
+  padding: 60px 0;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.profile-card {
+  background: var(--white);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: var(--shadow);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid var(--cream);
+}
+
+.profile-avatar {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-header h2 {
+  font-size: 22px;
+  color: var(--brown);
+  margin-bottom: 4px;
+}
+
+.profile-header p {
+  font-size: 14px;
+  color: #888;
+}
+
+.profile-card h3 {
+  font-size: 18px;
+  color: var(--brown);
+  margin-bottom: 20px;
+}
+
+.orders-card {
+  background: var(--white);
+  border-radius: 15px;
+  padding: 35px;
+  box-shadow: var(--shadow);
+}
+
+.orders-card h3 {
+  font-size: 22px;
+  color: var(--brown);
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--cream);
+}
+
+.my-order-card {
+  background: var(--cream);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 15px;
+  border-left: 4px solid var(--gold);
+}
+
+.my-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.my-order-number {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--brown);
+}
+
+.my-order-date {
+  font-size: 13px;
+  color: #888;
+}
+
+.my-order-status {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.my-order-items {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.my-order-total {
+  font-size: 15px;
+  color: var(--brown);
+}
+
+.my-order-total strong {
+  color: var(--gold);
+}
+
+.empty-orders {
+  text-align: center;
+  padding: 40px;
+  color: #888;
+}
+
+.empty-orders i {
+  font-size: 40px;
+  margin-bottom: 15px;
+  color: #ddd;
+  display: block;
+}
+
+.empty-orders a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+}
