@@ -136,7 +136,11 @@ async function openModal(itemId) {
   const globalToppings = [];
   globalSnap.forEach(doc => globalToppings.push({ id: doc.id, ...doc.data() }));
   
-  if (globalToppings.length > 0 && item.categoryId !== 'drinks') {
+  // Get category name to check if drinks
+  const catDoc = await db.collection('categories').doc(item.categoryId).get();
+  const catName = catDoc.exists ? catDoc.data().name.toLowerCase() : '';
+  
+  if (globalToppings.length > 0 && !catName.includes('drink')) {
     const toppingsList = globalToppings.filter(t => t.type === 'topping');
     const saucesList = globalToppings.filter(t => t.type === 'sauce');
     
