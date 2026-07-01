@@ -1,6 +1,6 @@
 // Redirect if already logged in
 auth.onAuthStateChanged(user => {
-  if (user) {
+  if (user && !window.location.pathname.includes('register')) {
     window.location.href = 'index.html';
   }
 });
