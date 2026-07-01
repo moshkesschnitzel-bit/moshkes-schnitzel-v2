@@ -30,29 +30,7 @@ async function sendOrderReceipt(order) {
     const itemsList = order.items.map(i => `${i.qty}x ${i.name}`).join(', ');
     const usdText = order.usdTotal ? ` ($${order.usdTotal})` : '';
     
-    const details = `
-      <p style="font-size:15px;color:#333;margin-bottom:8px;">
-        <strong>Order Number:</strong> #${order.orderNumber}
-      </p>
-      <p style="font-size:15px;color:#333;margin-bottom:8px;">
-        <strong>Items:</strong> ${itemsList}
-      </p>
-      <p style="font-size:15px;color:#333;margin-bottom:8px;">
-        <strong>Order Type:</strong> ${order.orderType === 'delivery' ? '🛵 Delivery' : '🏪 Pickup'}
-      </p>
-      <p style="font-size:15px;color:#333;margin-bottom:8px;">
-        <strong>Payment:</strong> ${order.paymentMethod === 'card' ? '💳 Credit Card' : '💵 Cash'}
-      </p>
-      ${order.orderType === 'delivery' ? `
-      <p style="font-size:15px;color:#333;margin-bottom:8px;">
-        <strong>Delivery Address:</strong> ${order.deliveryAddress}
-      </p>` : ''}
-      <div style="border-top:2px solid #f0a500;margin-top:15px;padding-top:15px;">
-        <p style="font-size:18px;color:#c8860a;font-weight:700;">
-          Total: ₪${order.total?.toFixed(2)}${usdText}
-        </p>
-      </div>
-    `;
+    const details = `Order Number: #${order.orderNumber} | Items: ${itemsList} | Type: ${order.orderType === 'delivery' ? 'Delivery' : 'Pickup'} | Payment: ${order.paymentMethod === 'card' ? 'Credit Card' : 'Cash'}${order.orderType === 'delivery' ? ' | Address: ' + order.deliveryAddress : ''} | Total: ₪${order.total?.toFixed(2)}${usdText}`;
 
     await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
       subject: `Order #${order.orderNumber} Confirmed!`,
