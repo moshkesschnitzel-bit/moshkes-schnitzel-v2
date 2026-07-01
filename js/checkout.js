@@ -202,9 +202,9 @@ async function placeOrder() {
     });
 
     // Update user profile with latest address
-    await db.collection('users').doc(currentUser.uid).update({
+    await db.collection('users').doc(currentUser.uid).set({
       name, phone, address: fullAddress
-    });
+    }, { merge: true });
 
     // Send order receipt email
     await sendOrderReceipt({
