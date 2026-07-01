@@ -206,29 +206,48 @@ async function placeOrder() {
       name, phone, address: fullAddress
     }, { merge: true });
 
-    // Send order receipt email
-    await sendOrderReceipt({
-      orderNumber,
-      customerName: name,
-      customerEmail: currentUser.email,
-      items: cart,
-      orderType: orderSummary.orderType,
-      paymentMethod: orderSummary.paymentMethod,
-      deliveryAddress: fullAddress,
-      total: orderSummary.total,
-      usdTotal: orderSummary.usdTotal
-    });
-
-    // Save order number for confirmation page
-    localStorage.setItem('lastOrderNumber', orderNumber);
-    localStorage.setItem('lastOrderId', orderRef.id);
-
-    // Clear cart
-    localStorage.removeItem('cart');
-    localStorage.removeItem('orderSummary');
-
-    // Redirect to confirmation
-    window.location.href = 'order-confirmation.html';
+    if (orderSummary.paymentMethod === 'card') {
+      // Save pending order for payment page
+      localStorage.setItem('pendingOrder', JSON.stringify({
+        orderNumber,
+        orderId: orderRef.id,
+        customerName: name,
+        customerEmail: currentUser.email,
+        customerPhone: phone,
+        items: cart,
+        orderType: orderSummary.orderType,
+        paymentMethod: 'card',
+        deliveryAddress: fullAddress,
+        mapsLink,
+        notes,
+        subtotal: orderSummary.subtotal,
+        deliveryFee: orderSummary.deliveryFee || 0,
+        total: orderSummary.total,
+        usdTotal: orderSummary.usdTotal,
+        isSplit: orderSummary.isSplit || false
+      }));
+      localStorage.removeItem('cart');
+      localStorage.removeItem('orderSummary');
+      window.location.href = 'payment.html';
+    } else {
+      // Cash order - confirm immediately
+      await sendOrderReceipt({
+        orderNumber,
+        customerName: name,
+        customerEmail: currentUser.email,
+        items: cart,
+        orderType: orderSummary.orderType,
+        paymentMethod: 'cash',
+        deliveryAddress: fullAddress,
+        total: orderSummary.total,
+        usdTotal: null
+      });
+      localStorage.setItem('lastOrderNumber', orderNumber);
+      localStorage.setItem('lastOrderId', orderRef.id);
+      localStorage.removeItem('cart');
+      localStorage.removeItem('orderSummary');
+      window.location.href = 'order-confirmation.html';
+    }
 
   } catch (error) {
     console.log('Order error:', error);

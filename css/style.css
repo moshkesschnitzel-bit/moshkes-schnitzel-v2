@@ -1985,3 +1985,52 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== PAYMENT PAGE ===== */
+.card-element {
+  border: 2px solid #eee;
+  border-radius: 12px;
+  padding: 15px 18px;
+  background: var(--white);
+  transition: border 0.3s;
+  margin-top: 20px;
+}
+
+.card-element:focus-within {
+  border-color: var(--gold);
+}
+
+.payment-summary {
+  margin-bottom: 10px;
+}
+
+.split-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.split-tab {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #eee;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s;
+}
+
+.split-tab.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: #fff8ee;
+}
+
+.split-status {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
