@@ -1,19 +1,16 @@
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCNzL3hKXmR1DSKC-GjHI4mWQDZD79zt-s",
-  authDomain: "moshkes-schnitzel-v2.firebaseapp.com",
-  projectId: "moshkes-schnitzel-v2",
-  storageBucket: "moshkes-schnitzel-v2.firebasestorage.app",
-  messagingSenderId: "271814640045",
-  appId: "1:271814640045:web:58b19aded25d2280dc2124",
-  measurementId: "G-VZ3G294QQL"
-};
+// Firebase config loaded from backend
+async function loadFirebaseConfig() {
+  try {
+    const response = await fetch('/.netlify/functions/get-config');
+    const config = await response.json();
+    firebase.initializeApp(config);
+    window.db = firebase.firestore();
+    window.auth = firebase.auth();
+    console.log('Firebase connected successfully!');
+    document.dispatchEvent(new Event('firebaseReady'));
+  } catch (error) {
+    console.error('Firebase config error:', error);
+  }
+}
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Initialize services
-const db = firebase.firestore();
-const auth = firebase.auth();
-
-console.log("Firebase connected successfully!");
+loadFirebaseConfig();
