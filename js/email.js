@@ -14,7 +14,7 @@ async function sendWelcomeEmail(email, name) {
       title: 'Welcome to Moshke\'s Schnitzel! 🎉',
       name: name || 'Friend',
       message: 'We\'re so happy to have you! Get ready for the most delicious schnitzel experience. Browse our menu and place your first order!',
-      details: '<p style="text-align:center;color:#c8860a;font-size:18px;font-weight:700;">Cozy Comfort Food — Est. 2025 🍽️</p>',
+      details: 'Cozy Comfort Food — Est. 2025 🍽️',
       to_email: email,
       reply_to: email
     });
