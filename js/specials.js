@@ -35,4 +35,10 @@ function loadSpecials() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadSpecials);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.db) {
+    loadSpecials();
+  } else {
+    document.addEventListener('firebaseReady', loadSpecials);
+  }
+});

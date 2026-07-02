@@ -32,4 +32,10 @@ async function loadFooter() {
 }
 
 // Run when page loads
-document.addEventListener('DOMContentLoaded', loadFooter);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.db) {
+    loadFooter();
+  } else {
+    document.addEventListener('firebaseReady', loadFooter);
+  }
+});

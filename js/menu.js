@@ -290,6 +290,13 @@ document.getElementById('item-modal').addEventListener('click', function(e) {
 
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-  loadMenu();
-  updateCartCount();
+  if (window.db) {
+    loadMenu();
+    updateCartCount();
+  } else {
+    document.addEventListener('firebaseReady', () => {
+      loadMenu();
+      updateCartCount();
+    });
+  }
 });
