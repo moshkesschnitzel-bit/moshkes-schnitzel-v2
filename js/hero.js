@@ -13,4 +13,10 @@ async function loadHeroImage() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadHeroImage);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.db) {
+    loadHeroImage();
+  } else {
+    document.addEventListener('firebaseReady', loadHeroImage);
+  }
+});
