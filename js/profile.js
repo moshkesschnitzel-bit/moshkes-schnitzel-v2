@@ -1,114 +1,123 @@
 let currentUser = null;
 
-document.addEventListener('DOMContentLoaded', () => {
+function initProfile() {
   auth.onAuthStateChanged(async user => {
-    if (!user) {
-      window.location.href = 'login.html';
-      return;
-    }
-    currentUser = user;
-    loadProfile(user);
-    loadMyOrders(user);
-  });
-});
+      if (!user) {
+            window.location.href = 'login.html';
+                  return;
+                      }
+                          currentUser = user;
+                              loadProfile(user);
+                                  loadMyOrders(user);
+                                    });
+                                    }
 
-// Load profile data
-async function loadProfile(user) {
-  document.getElementById('profile-email-input').value = user.email;
-  document.getElementById('profile-email-display').textContent = user.email;
+                                    document.addEventListener('DOMContentLoaded', () => {
+                                      if (window.auth) {
+                                          initProfile();
+                                            } else {
+                                                document.addEventListener('firebaseReady', initProfile);
+                                                  }
+                                                  });
 
-  const userDoc = await db.collection('users').doc(user.uid).get();
-  if (userDoc.exists) {
-    const data = userDoc.data();
-    document.getElementById('profile-name-input').value = data.name || '';
-    document.getElementById('profile-phone-input').value = data.phone || '';
-    document.getElementById('profile-address-input').value = data.address || '';
-    document.getElementById('profile-name').textContent = data.name || user.email;
-    document.getElementById('profile-avatar').textContent = 
-      (data.name || user.email)[0].toUpperCase();
-  }
-}
+                                                  // Load profile data
+                                                  async function loadProfile(user) {
+                                                    document.getElementById('profile-email-input').value = user.email;
+                                                      document.getElementById('profile-email-display').textContent = user.email;
 
-// Save profile
-async function saveProfile() {
-  const name = document.getElementById('profile-name-input').value.trim();
-  const phone = document.getElementById('profile-phone-input').value.trim();
-  const address = document.getElementById('profile-address-input').value.trim();
+                                                        const userDoc = await db.collection('users').doc(user.uid).get();
+                                                          if (userDoc.exists) {
+                                                              const data = userDoc.data();
+                                                                  document.getElementById('profile-name-input').value = data.name || '';
+                                                                      document.getElementById('profile-phone-input').value = data.phone || '';
+                                                                          document.getElementById('profile-address-input').value = data.address || '';
+                                                                              document.getElementById('profile-name').textContent = data.name || user.email;
+                                                                                  document.getElementById('profile-avatar').textContent = 
+                                                                                        (data.name || user.email)[0].toUpperCase();
+                                                                                          }
+                                                                                          }
 
-  if (!name) {
-    showProfileMsg('Please enter your name.', 'error');
-    return;
-  }
+                                                                                          // Save profile
+                                                                                          async function saveProfile() {
+                                                                                            const name = document.getElementById('profile-name-input').value.trim();
+                                                                                              const phone = document.getElementById('profile-phone-input').value.trim();
+                                                                                                const address = document.getElementById('profile-address-input').value.trim();
 
-  try {
-    await db.collection('users').doc(currentUser.uid).update({ name, phone, address });
-    await currentUser.updateProfile({ displayName: name });
-    document.getElementById('profile-name').textContent = name;
-    document.getElementById('profile-avatar').textContent = name[0].toUpperCase();
-    showProfileMsg('✅ Profile saved successfully!', 'success');
-  } catch (error) {
-    showProfileMsg('Something went wrong. Please try again.', 'error');
-  }
-}
+                                                                                                  if (!name) {
+                                                                                                      showProfileMsg('Please enter your name.', 'error');
+                                                                                                          return;
+                                                                                                            }
 
-// Load my orders
-async function loadMyOrders(user) {
-  const list = document.getElementById('my-orders-list');
-  
-  try {
-    const snap = await db.collection('orders')
-      .where('userId', '==', user.uid)
-      .orderBy('createdAt', 'desc')
-      .get();
+                                                                                                              try {
+                                                                                                                  await db.collection('users').doc(currentUser.uid).set({ name, phone, address }, { merge: true });
+                                                                                                                      await currentUser.updateProfile({ displayName: name });
+                                                                                                                          document.getElementById('profile-name').textContent = name;
+                                                                                                                              document.getElementById('profile-avatar').textContent = name[0].toUpperCase();
+                                                                                                                                  showProfileMsg('✅ Profile saved successfully!', 'success');
+                                                                                                                                    } catch (error) {
+                                                                                                                                        showProfileMsg('Something went wrong. Please try again.', 'error');
+                                                                                                                                          }
+                                                                                                                                          }
 
-    if (snap.empty) {
-      list.innerHTML = `
-        <div class="empty-orders">
-          <i class="fas fa-receipt"></i>
-          <p>No orders yet. <a href="menu.html">Order now!</a></p>
-        </div>
-      `;
-      return;
-    }
+                                                                                                                                          // Load my orders
+                                                                                                                                          async function loadMyOrders(user) {
+                                                                                                                                            const list = document.getElementById('my-orders-list');
+                                                                                                                                              
+                                                                                                                                                try {
+                                                                                                                                                    const snap = await db.collection('orders')
+                                                                                                                                                          .where('userId', '==', user.uid)
+                                                                                                                                                                .orderBy('createdAt', 'desc')
+                                                                                                                                                                      .get();
 
-    list.innerHTML = snap.docs.map(doc => {
-      const o = doc.data();
-      const date = o.createdAt?.toDate().toLocaleDateString('en-IL') || '';
-      const statusColor = {
-        pending: '#e67e22', preparing: '#3498db',
-        ready: '#27ae60', delivered: '#95a5a6', cancelled: '#e74c3c'
-      }[o.status] || '#888';
+                                                                                                                                                                          if (snap.empty) {
+                                                                                                                                                                                list.innerHTML = `
+                                                                                                                                                                                        <div class="empty-orders">
+                                                                                                                                                                                                  <i class="fas fa-receipt"></i>
+                                                                                                                                                                                                            <p>No orders yet. <a href="menu.html">Order now!</a></p>
+                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                          `;
+                                                                                                                                                                                                                                return;
+                                                                                                                                                                                                                                    }
 
-      return `
-        <div class="my-order-card">
-          <div class="my-order-header">
-            <span class="my-order-number">#${o.orderNumber}</span>
-            <span class="my-order-date">${date}</span>
-            <span class="my-order-status" style="color:${statusColor};">
-              ${o.status?.toUpperCase()}
-            </span>
-          </div>
-          <div class="my-order-items">
-            ${o.items?.map(i => `<span>${i.qty}x ${i.name}</span>`).join(' · ')}
-          </div>
-          <div class="my-order-total">
-            Total: <strong>₪${o.total?.toFixed(2)}</strong>
-            ${o.usdTotal ? ` ($${o.usdTotal})` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
+                                                                                                                                                                                                                                        list.innerHTML = snap.docs.map(doc => {
+                                                                                                                                                                                                                                              const o = doc.data();
+                                                                                                                                                                                                                                                    const date = o.createdAt?.toDate().toLocaleDateString('en-IL') || '';
+                                                                                                                                                                                                                                                          const statusColor = {
+                                                                                                                                                                                                                                                                  pending: '#e67e22', preparing: '#3498db',
+                                                                                                                                                                                                                                                                          ready: '#27ae60', delivered: '#95a5a6', cancelled: '#e74c3c'
+                                                                                                                                                                                                                                                                                }[o.status] || '#888';
 
-  } catch (error) {
-    list.innerHTML = '<p style="color:#888;padding:20px;">Could not load orders.</p>';
-  }
-}
+                                                                                                                                                                                                                                                                                      return `
+                                                                                                                                                                                                                                                                                              <div class="my-order-card">
+                                                                                                                                                                                                                                                                                                        <div class="my-order-header">
+                                                                                                                                                                                                                                                                                                                    <span class="my-order-number">#${o.orderNumber}</span>
+                                                                                                                                                                                                                                                                                                                                <span class="my-order-date">${date}</span>
+                                                                                                                                                                                                                                                                                                                                            <span class="my-order-status" style="color:${statusColor};">
+                                                                                                                                                                                                                                                                                                                                                          ${o.status?.toUpperCase()}
+                                                                                                                                                                                                                                                                                                                                                                      </span>
+                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                          <div class="my-order-items">
+                                                                                                                                                                                                                                                                                                                                                                                                      ${o.items?.map(i => `<span>${i.qty}x ${i.name}</span>`).join(' · ')}
+                                                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                          <div class="my-order-total">
+                                                                                                                                                                                                                                                                                                                                                                                                                                      Total: <strong>₪${o.total?.toFixed(2)}</strong>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  ${o.usdTotal ? ` ($${o.usdTotal})` : ''}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                          `;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                              }).join('');
 
-function showProfileMsg(msg, type) {
-  const div = document.getElementById('profile-msg');
-  div.textContent = msg;
-  div.style.display = 'block';
-  div.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
-  div.style.fontWeight = '600';
-  div.style.fontSize = '14px';
-}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } catch (error) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    console.log('Orders error:', error);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        list.innerHTML = '<p style="color:#888;padding:20px;">Could not load orders.</p>';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          function showProfileMsg(msg, type) {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            const div = document.getElementById('profile-msg');
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              div.textContent = msg;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                div.style.display = 'block';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  div.style.color = type === 'success' ? '#27ae60' : '#e74c3c';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    div.style.fontWeight = '600';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      div.style.fontSize = '14px';
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      }

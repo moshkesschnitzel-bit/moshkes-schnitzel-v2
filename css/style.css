@@ -2034,3 +2034,14 @@ footer {
   color: #666;
   margin-bottom: 8px;
 }
+
+.user-name-btn {
+    background: var(--gold);
+      color: white;
+        padding: 8px 18px;
+          border-radius: 25px;
+            font-size: 14px;
+              font-weight: 600;
+                cursor: pointer;
+                }
+}
