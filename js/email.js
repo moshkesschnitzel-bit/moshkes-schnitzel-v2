@@ -41,6 +41,25 @@ async function sendOrderReceipt(order) {
       to_email: order.customerEmail
     });
     console.log('Order receipt sent!');
+
+    // Build detailed items list for owner
+    const ownerItemsList = order.items.map(item => {
+      let itemText = `• ${item.qty}x ${item.name} — ₪${item.itemTotal?.toFixed(2)}`;
+      if (item.extras?.length > 0) itemText += ` | Extras: ${item.extras.map(e => e.name).join(', ')}`;
+      if (item.toppings?.length > 0) itemText += ` | Toppings: ${item.toppings.map(t => t.name).join(', ')}`;
+      if (item.request) itemText += ` | Note: ${item.request}`;
+      return itemText;
+    }).join(' --- ');
+
+    await emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      subject: `New Order #${order.orderNumber} from ${order.customerName}`,
+      title: `New Order! #${order.orderNumber}`,
+      name: 'Moshke',
+      message: `From: ${order.customerName} | Phone: ${order.customerPhone} | ${order.orderType === 'delivery' ? 'Delivery to: ' + order.deliveryAddress : 'PICKUP'} | Payment: ${order.paymentMethod === 'card' ? 'Credit Card' : 'Cash'}`,
+      details: ownerItemsList + ` --- Total: ₪${order.total?.toFixed(2)}${usdText}`,
+      to_email: 'moshkesschnitzel@gmail.com',
+      reply_to: order.customerEmail
+    });
   } catch (error) {
     console.log('Order receipt error:', error);
   }
