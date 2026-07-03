@@ -197,4 +197,10 @@ function proceedToCheckout() {
 }
 
 // Init
-document.addEventListener('DOMContentLoaded', loadCart);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.db) {
+    loadCart();
+  } else {
+    document.addEventListener('firebaseReady', loadCart);
+  }
+});

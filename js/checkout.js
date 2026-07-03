@@ -4,8 +4,7 @@ let selectedAddress = '';
 let addressTimeout = null;
 
 // Init
-document.addEventListener('DOMContentLoaded', async () => {
-  // Check auth
+async function initCheckout() {
   auth.onAuthStateChanged(async user => {
     if (!user) {
       window.location.href = 'login.html';
@@ -254,5 +253,14 @@ async function placeOrder() {
     alert('Something went wrong. Please try again.');
     btn.disabled = false;
     btn.textContent = 'Place Order';
+  
   }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.auth) {
+        initCheckout();
+          } else {
+              document.addEventListener('firebaseReady', initCheckout);
+                }
+                });
