@@ -3,39 +3,16 @@ let orderSummary = null;
 let selectedAddress = '';
 let addressTimeout = null;
 
-// Init
 async function initCheckout() {
-  auth.onAuthStateChanged(async user => {
-    if (!user) {
-      window.location.href = 'login.html';
-      return;
-    }
-    currentUser = user;
-
-    // Pre-fill user details
-    document.getElementById('checkout-email').value = user.email;
-
-    // Load user profile from Firestore
-    const userDoc = await db.collection('users').doc(user.uid).get();
-    if (userDoc.exists) {
-      const data = userDoc.data();
-      if (data.name) document.getElementById('checkout-name').value = data.name;
-      if (data.phone) document.getElementById('checkout-phone').value = data.phone;
-      if (data.address) {
-        document.getElementById('checkout-address').value = data.address;
-        selectedAddress = data.address;
-        showMapPreview(data.address);
-      }
-    }
-  });
-
   // Check store is open
-  const storeDoc = await db.collection('settings').doc('store').get();
-  if (storeDoc.exists && storeDoc.data().isOpen === false) {
-    document.getElementById('store-closed-msg').style.display = 'block';
-    document.getElementById('place-order-btn').disabled = true;
-    document.getElementById('place-order-btn').style.background = '#ccc';
-  }
+  try {
+    const storeDoc = await db.collection('settings').doc('store').get();
+    if (storeDoc.exists && storeDoc.data().isOpen === false) {
+      document.getElementById('store-closed-msg').style.display = 'block';
+      document.getElementById('place-order-btn').disabled = true;
+      document.getElementById('place-order-btn').style.background = '#ccc';
+    }
+  } catch(e) {}
 
   // Load order summary
   orderSummary = JSON.parse(localStorage.getItem('orderSummary') || '{}');
@@ -43,14 +20,44 @@ async function initCheckout() {
 
   // Hide delivery address if pickup
   if (orderSummary.orderType === 'pickup') {
-    document.getElementById('delivery-address-section').style.display = 'none';
+    const deliverySection = document.getElementById('delivery-address-section');
+    if (deliverySection) deliverySection.style.display = 'none';
   }
-});
+
+  // Check auth
+  auth.onAuthStateChanged(async user => {
+    if (!user) {
+      window.location.href = 'login.html';
+      return;
+    }
+    currentUser = user;
+
+    // Pre-fill email
+    document.getElementById('checkout-email').value = user.email;
+
+    // Load user profile from Firestore
+    try {
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        const data = userDoc.data();
+        if (data.name) document.getElementById('checkout-name').value = data.name;
+        if (data.phone) document.getElementById('checkout-phone').value = data.phone;
+        if (data.address) {
+          document.getElementById('checkout-address').value = data.address;
+          selectedAddress = data.address;
+          showMapPreview(data.address);
+        }
+      }
+    } catch(e) {}
+  });
+}
 
 // Load order summary
 function loadCheckoutSummary() {
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
   const itemsDiv = document.getElementById('checkout-items');
+
+  if (!itemsDiv) return;
 
   itemsDiv.innerHTML = '';
   cart.forEach(item => {
@@ -63,35 +70,44 @@ function loadCheckoutSummary() {
   });
 
   if (orderSummary) {
-    document.getElementById('co-subtotal').textContent = `₪${orderSummary.subtotal?.toFixed(2) || 0}`;
+    const subtotalEl = document.getElementById('co-subtotal');
+    const totalEl = document.getElementById('co-total');
+    if (subtotalEl) subtotalEl.textContent = `₪${orderSummary.subtotal?.toFixed(2) || 0}`;
     
     if (orderSummary.orderType === 'delivery') {
-      document.getElementById('co-delivery').textContent = `₪${orderSummary.deliveryFee || 0}`;
+      const deliveryEl = document.getElementById('co-delivery');
+      if (deliveryEl) deliveryEl.textContent = `₪${orderSummary.deliveryFee || 0}`;
     } else {
-      document.getElementById('co-delivery-row').style.display = 'none';
+      const deliveryRow = document.getElementById('co-delivery-row');
+      if (deliveryRow) deliveryRow.style.display = 'none';
     }
 
     if (orderSummary.paymentMethod === 'card') {
       const ccFee = orderSummary.subtotal * 0.12;
-      document.getElementById('co-cc-row').style.display = 'flex';
-      document.getElementById('co-cc-fee').textContent = `₪${ccFee.toFixed(2)}`;
-      document.getElementById('co-usd-row').style.display = 'flex';
-      document.getElementById('co-usd').textContent = `$${orderSummary.usdTotal}`;
-      document.getElementById('payment-badge').innerHTML = 
-        '<i class="fas fa-credit-card"></i> Credit Card';
+      const ccRow = document.getElementById('co-cc-row');
+      const ccFeeEl = document.getElementById('co-cc-fee');
+      const usdRow = document.getElementById('co-usd-row');
+      const usdEl = document.getElementById('co-usd');
+      const badge = document.getElementById('payment-badge');
+      if (ccRow) ccRow.style.display = 'flex';
+      if (ccFeeEl) ccFeeEl.textContent = `₪${ccFee.toFixed(2)}`;
+      if (usdRow) usdRow.style.display = 'flex';
+      if (usdEl) usdEl.textContent = `$${orderSummary.usdTotal}`;
+      if (badge) badge.innerHTML = '<i class="fas fa-credit-card"></i> Credit Card';
     }
 
-    document.getElementById('co-total').textContent = `₪${orderSummary.total?.toFixed(2) || 0}`;
+    if (totalEl) totalEl.textContent = `₪${orderSummary.total?.toFixed(2) || 0}`;
 
     if (orderSummary.isSplit) {
-      document.getElementById('split-info-box').style.display = 'block';
-      document.getElementById('co-split-amount').textContent = 
-        (orderSummary.total / 2).toFixed(2);
+      const splitBox = document.getElementById('split-info-box');
+      const splitAmt = document.getElementById('co-split-amount');
+      if (splitBox) splitBox.style.display = 'block';
+      if (splitAmt) splitAmt.textContent = (orderSummary.total / 2).toFixed(2);
     }
   }
 }
 
-// Search address using Google Maps Geocoding
+// Search address
 async function searchAddress() {
   const input = document.getElementById('checkout-address').value;
   clearTimeout(addressTimeout);
@@ -137,8 +153,10 @@ function showAddressSuggestions(results) {
 function showMapPreview(address) {
   const encodedAddress = encodeURIComponent(address);
   const mapIframe = document.getElementById('map-iframe');
-  mapIframe.src = `https://maps.google.com/maps?q=${encodedAddress}&output=embed`;
-  document.getElementById('map-preview').style.display = 'block';
+  if (mapIframe) {
+    mapIframe.src = `https://maps.google.com/maps?q=${encodedAddress}&output=embed`;
+    document.getElementById('map-preview').style.display = 'block';
+  }
 }
 
 // Place order
@@ -165,20 +183,15 @@ async function placeOrder() {
     return;
   }
 
-  // Disable button
   const btn = document.getElementById('place-order-btn');
   btn.disabled = true;
   btn.textContent = 'Placing Order...';
 
   try {
-    // Generate order number
     const orderNumber = Math.floor(10000 + Math.random() * 90000).toString();
-
-    // Full delivery address
     const fullAddress = apt ? `${address}, ${apt}` : address;
     const mapsLink = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}`;
 
-    // Save order to Firestore
     const orderRef = await db.collection('orders').add({
       orderNumber,
       userId: currentUser.uid,
@@ -200,13 +213,11 @@ async function placeOrder() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    // Update user profile with latest address
     await db.collection('users').doc(currentUser.uid).set({
       name, phone, address: fullAddress
     }, { merge: true });
 
     if (orderSummary.paymentMethod === 'card') {
-      // Save pending order for payment page
       localStorage.setItem('pendingOrder', JSON.stringify({
         orderNumber,
         orderId: orderRef.id,
@@ -229,7 +240,6 @@ async function placeOrder() {
       localStorage.removeItem('orderSummary');
       window.location.href = 'payment.html';
     } else {
-      // Cash order - confirm immediately
       await sendOrderReceipt({
         orderNumber,
         customerName: name,
@@ -253,14 +263,13 @@ async function placeOrder() {
     alert('Something went wrong. Please try again.');
     btn.disabled = false;
     btn.textContent = 'Place Order';
-  
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (window.auth) {
-        initCheckout();
-          } else {
-              document.addEventListener('firebaseReady', initCheckout);
-                }
-                });
+  if (window.db && window.auth) {
+    initCheckout();
+  } else {
+    document.addEventListener('firebaseReady', initCheckout);
+  }
+});
