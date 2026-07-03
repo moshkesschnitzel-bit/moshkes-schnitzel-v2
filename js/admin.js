@@ -143,7 +143,8 @@ async function loadDashboard() {
 // ===== ORDERS =====
 function loadOrders() {
   db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snap => {
-    allOrders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    allOrders = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(o => !o.adminDeleted);
     renderOrders(allOrders);
 
     const pending = allOrders.filter(o => o.status === 'pending').length;
@@ -190,6 +191,10 @@ function renderOrders(orders) {
           onclick="updateOrderStatus('${o.id}', 'delivered')">Delivered</button>
         <button class="btn-status btn-cancelled" 
           onclick="updateOrderStatus('${o.id}', 'cancelled')">Cancel</button>
+          <button class="btn-status" style="background:#7f8c8d;" 
+          onclick="viewOrderDetails('${o.id}')">📋 View</button>
+          <button class="btn-status" style="background:#e74c3c;" 
+          onclick="deleteOrder('${o.id}')">🗑️ Delete</button>
       </div>
     </div>
   `).join('');
@@ -980,5 +985,79 @@ async function deleteCategoryBox(id) {
   if (confirm('Delete this category box?')) {
     await db.collection('categoryBoxes').doc(id).delete();
     loadCategoryBoxesAdmin();
+  
   }
 }
+
+// ===== VIEW ORDER DETAILS =====
+function viewOrderDetails(orderId) {
+  const order = allOrders.find(o => o.id === orderId);
+    if (!order) return;
+
+      const itemsHtml = order.items?.map(item => {
+          const extras = item.extras?.length > 0 ? `<br><small>Extras: ${item.extras.map(e => e.name).join(', ')}</small>` : '';
+              const toppings = item.toppings?.length > 0 ? `<br><small>Toppings: ${item.toppings.map(t => t.name).join(', ')}</small>` : '';
+                  const request = item.request ? `<br><small>Note: ${item.request}</small>` : '';
+                      return `
+                            <div style="padding:10px;border-bottom:1px solid #eee;">
+                                    <strong>${item.qty}x ${item.name}</strong> — ₪${item.itemTotal?.toFixed(2)}
+                                            ${extras}${toppings}${request}
+                                                  </div>
+                                                      `;
+                                                        }).join('') || 'No items';
+
+                                                          const content = `
+                                                              <div style="font-family:'Poppins',sans-serif;max-width:500px;">
+                                                                    <h3 style="color:#3b1f0e;margin-bottom:15px;">Order #${order.orderNumber}</h3>
+                                                                          
+                                                                                <div style="background:#fdf3e3;border-radius:10px;padding:15px;margin-bottom:15px;">
+                                                                                        <p><strong>Customer:</strong> ${order.customerName}</p>
+                                                                                                <p><strong>Phone:</strong> ${order.customerPhone}</p>
+                                                                                                        <p><strong>Email:</strong> ${order.customerEmail}</p>
+                                                                                                                ${order.orderType === 'delivery' ? `<p><strong>Address:</strong> ${order.deliveryAddress}</p>
+                                                                                                                        <p><a href="${order.mapsLink}" target="_blank" style="color:#c8860a;">📍 View on Maps</a></p>` : '<p><strong>Type:</strong> Pickup</p>'}
+                                                                                                                                ${order.notes ? `<p><strong>Notes:</strong> ${order.notes}</p>` : ''}
+                                                                                                                                      </div>
+
+                                                                                                                                            <div style="background:white;border:2px solid #eee;border-radius:10px;margin-bottom:15px;">
+                                                                                                                                                    <div style="padding:10px;background:#3b1f0e;border-radius:8px 8px 0 0;">
+                                                                                                                                                              <strong style="color:white;">Items Ordered</strong>
+                                                                                                                                                                      </div>
+                                                                                                                                                                              ${itemsHtml}
+                                                                                                                                                                                    </div>
+
+                                                                                                                                                                                          <div style="background:#fdf3e3;border-radius:10px;padding:15px;">
+                                                                                                                                                                                                  <p><strong>Payment:</strong> ${order.paymentMethod === 'card' ? '💳 Credit Card' : '💵 Cash'}</p>
+                                                                                                                                                                                                          <p><strong>Subtotal:</strong> ₪${order.subtotal?.toFixed(2)}</p>
+                                                                                                                                                                                                                  ${order.deliveryFee > 0 ? `<p><strong>Delivery Fee:</strong> ₪${order.deliveryFee}</p>` : ''}
+                                                                                                                                                                                                                          <p style="font-size:18px;color:#c8860a;font-weight:700;"><strong>Total:</strong> ₪${order.total?.toFixed(2)}${order.usdTotal ? ` ($${order.usdTotal})` : ''}</p>
+                                                                                                                                                                                                                                  ${order.isSplit ? `<p><strong>Split:</strong> ₪${(order.total/2).toFixed(2)} per person</p>` : ''}
+                                                                                                                                                                                                                                          <p><strong>Status:</strong> <span style="text-transform:uppercase;font-weight:700;">${order.status}</span></p>
+                                                                                                                                                                                                                                                  <p><strong>Date:</strong> ${order.createdAt?.toDate().toLocaleString() || ''}</p>
+                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                              `;
+
+                                                                                                                                                                                                                                                                // Create modal
+                                                                                                                                                                                                                                                                  const modal = document.createElement('div');
+                                                                                                                                                                                                                                                                    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:3000;padding:20px;';
+                                                                                                                                                                                                                                                                      modal.innerHTML = `
+                                                                                                                                                                                                                                                                          <div style="background:white;border-radius:20px;padding:30px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;">
+                                                                                                                                                                                                                                                                                <button onclick="this.closest('[style*=fixed]').remove()" 
+                                                                                                                                                                                                                                                                                        style="position:absolute;top:15px;right:15px;background:#f5f5f5;border:none;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;">×</button>
+                                                                                                                                                                                                                                                                                              ${content}
+                                                                                                                                                                                                                                                                                                  </div>
+                                                                                                                                                                                                                                                                                                    `;
+                                                                                                                                                                                                                                                                                                      document.body.appendChild(modal);
+                                                                                                                                                                                                                                                                                                      }
+
+                                                                                                                                                                                                                                                                                                      // ===== DELETE ORDER =====
+                                                                                                                                                                                                                                                                                                      async function deleteOrder(orderId) {
+                                                                                                                                                                                                                                                                                                        if (confirm('Delete this order? It will only be removed from the admin view.')) {
+                                                                                                                                                                                                                                                                                                            await db.collection('orders').doc(orderId).update({ 
+                                                                                                                                                                                                                                                                                                                  adminDeleted: true 
+                                                                                                                                                                                                                                                                                                                      });
+                                                                                                                                                                                                                                                                                                                          loadOrders();
+                                                                                                                                                                                                                                                                                                                              loadDashboard();
+                                                                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                                                                }

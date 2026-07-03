@@ -273,3 +273,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('firebaseReady', initCheckout);
   }
 });
+
+>>>>>>> f04f1274e0eb3c652a412a7cabe430c7c8980fc1
