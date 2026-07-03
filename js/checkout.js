@@ -4,7 +4,6 @@ let selectedAddress = '';
 let addressTimeout = null;
 
 async function initCheckout() {
-  // Check store is open
   try {
     const storeDoc = await db.collection('settings').doc('store').get();
     if (storeDoc.exists && storeDoc.data().isOpen === false) {
@@ -14,28 +13,21 @@ async function initCheckout() {
     }
   } catch(e) {}
 
-  // Load order summary
   orderSummary = JSON.parse(localStorage.getItem('orderSummary') || '{}');
   loadCheckoutSummary();
 
-  // Hide delivery address if pickup
   if (orderSummary.orderType === 'pickup') {
     const deliverySection = document.getElementById('delivery-address-section');
     if (deliverySection) deliverySection.style.display = 'none';
   }
 
-  // Check auth
   auth.onAuthStateChanged(async user => {
     if (!user) {
       window.location.href = 'login.html';
       return;
     }
     currentUser = user;
-
-    // Pre-fill email
     document.getElementById('checkout-email').value = user.email;
-
-    // Load user profile from Firestore
     try {
       const userDoc = await db.collection('users').doc(user.uid).get();
       if (userDoc.exists) {
@@ -52,11 +44,9 @@ async function initCheckout() {
   });
 }
 
-// Load order summary
 function loadCheckoutSummary() {
   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
   const itemsDiv = document.getElementById('checkout-items');
-
   if (!itemsDiv) return;
 
   itemsDiv.innerHTML = '';
@@ -73,7 +63,7 @@ function loadCheckoutSummary() {
     const subtotalEl = document.getElementById('co-subtotal');
     const totalEl = document.getElementById('co-total');
     if (subtotalEl) subtotalEl.textContent = `₪${orderSummary.subtotal?.toFixed(2) || 0}`;
-    
+
     if (orderSummary.orderType === 'delivery') {
       const deliveryEl = document.getElementById('co-delivery');
       if (deliveryEl) deliveryEl.textContent = `₪${orderSummary.deliveryFee || 0}`;
@@ -107,16 +97,13 @@ function loadCheckoutSummary() {
   }
 }
 
-// Search address
 async function searchAddress() {
   const input = document.getElementById('checkout-address').value;
   clearTimeout(addressTimeout);
-  
   if (input.length < 3) {
     document.getElementById('address-suggestions').innerHTML = '';
     return;
   }
-
   addressTimeout = setTimeout(async () => {
     try {
       const response = await fetch(
@@ -124,17 +111,13 @@ async function searchAddress() {
       );
       const results = await response.json();
       showAddressSuggestions(results);
-    } catch (error) {
-      console.log('Address search error:', error);
-    }
+    } catch (error) {}
   }, 500);
 }
 
-// Show address suggestions
 function showAddressSuggestions(results) {
   const suggestionsDiv = document.getElementById('address-suggestions');
   suggestionsDiv.innerHTML = '';
-
   results.forEach(result => {
     const div = document.createElement('div');
     div.className = 'suggestion-item';
@@ -149,7 +132,6 @@ function showAddressSuggestions(results) {
   });
 }
 
-// Show map preview
 function showMapPreview(address) {
   const encodedAddress = encodeURIComponent(address);
   const mapIframe = document.getElementById('map-iframe');
@@ -159,7 +141,6 @@ function showMapPreview(address) {
   }
 }
 
-// Place order
 async function placeOrder() {
   const name = document.getElementById('checkout-name').value.trim();
   const phone = document.getElementById('checkout-phone').value.trim();
@@ -273,5 +254,3 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('firebaseReady', initCheckout);
   }
 });
-
->>>>>>> f04f1274e0eb3c652a412a7cabe430c7c8980fc1
