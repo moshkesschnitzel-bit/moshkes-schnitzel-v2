@@ -249,6 +249,17 @@
           </div>
 
           <div class="setting-group">
+            <h4>Closed Today</h4>
+            <div style="display:flex;align-items:center;gap:15px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="closed-today-toggle" onchange="toggleClosedToday()" />
+                <span class="slider"></span>
+              </label>
+              <span id="closed-today-label" style="font-size:14px;color:#888;">Store is open today</span>
+            </div>
+          </div>
+
+          <div class="setting-group">
             <h4>Opening Hours</h4>
             <div id="hours-editor"></div>
             <button class="btn-save-hours" onclick="saveHours()">

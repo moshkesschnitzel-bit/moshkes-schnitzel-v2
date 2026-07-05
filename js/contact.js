@@ -77,4 +77,10 @@ async function sendMessage() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadContactInfo);
+document.addEventListener('DOMContentLoaded', () => {
+  if (window.db) {
+    loadContactInfo();
+  } else {
+    document.addEventListener('firebaseReady', loadContactInfo);
+  }
+});

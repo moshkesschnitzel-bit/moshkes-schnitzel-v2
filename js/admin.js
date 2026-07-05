@@ -58,6 +58,7 @@ async function initAdmin() {
   loadGlobalToppings();
   loadHeroImage();
   loadCategoryBoxesAdmin();
+  loadClosedToday();
 }
 
 // ===== NAVIGATION =====
@@ -1061,3 +1062,22 @@ function viewOrderDetails(orderId) {
                                                                                                                                                                                                                                                                                                                               loadDashboard();
                                                                                                                                                                                                                                                                                                                                 }
                                                                                                                                                                                                                                                                                                                                 }
+
+                                                                                                                                                                                                                                                                                                               // ===== CLOSED TODAY =====
+async function loadClosedToday() {
+  const doc = await db.collection('settings').doc('store').get();
+  if (doc.exists && doc.data().closedToday) {
+    document.getElementById('closed-today-toggle').checked = true;
+    document.getElementById('closed-today-label').textContent = '🔴 Store is closed today';
+  } else {
+    document.getElementById('closed-today-toggle').checked = false;
+    document.getElementById('closed-today-label').textContent = '🟢 Store is open today';
+  }
+}
+
+async function toggleClosedToday() {
+  const closedToday = document.getElementById('closed-today-toggle').checked;
+  await db.collection('settings').doc('store').set({ closedToday }, { merge: true });
+  document.getElementById('closed-today-label').textContent = 
+    closedToday ? '🔴 Store is closed today' : '🟢 Store is open today';
+}                 
