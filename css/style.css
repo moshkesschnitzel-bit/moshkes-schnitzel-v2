@@ -117,7 +117,7 @@ a {
 }
 
 .hamburger {
-  display: block;
+  display: none;
   color: var(--cream);
   font-size: 24px;
   cursor: pointer;
@@ -2177,6 +2177,12 @@ footer {
                                                                                                                                                                         }
 
                                                                                                                                                                         @media (max-width: 480px) {
+  .hamburger {
+    display: none !important;
+  }
+}
+
+@media (min-width: 481px) {
   .hamburger {
     display: none !important;
   }
