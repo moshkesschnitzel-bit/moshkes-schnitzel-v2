@@ -123,6 +123,51 @@ a {
   cursor: pointer;
 }
 
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--dark-brown);
+    flex-direction: column;
+    padding: 80px 30px 30px;
+    z-index: 2000;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+    gap: 10px;
+  }
+
+  .nav-links.open {
+    display: flex !important;
+  }
+
+  .hamburger {
+    display: block !important;
+  }
+
+  .navbar {
+    padding: 10px 20px;
+  }
+
+  .nav-logo img {
+    height: 55px;
+    border-radius: 50%;
+  }
+
+  .nav-icons {
+    display: flex !important;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .btn-order {
+    display: block;
+    margin-top: 10px;
+  }
+}
+
 /* ===== HERO ===== */
 .hero {
   background: linear-gradient(135deg, var(--dark-brown) 0%, var(--brown) 50%, var(--gold) 100%);
