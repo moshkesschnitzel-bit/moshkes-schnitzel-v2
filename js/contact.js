@@ -14,29 +14,41 @@ async function loadContactInfo() {
 
     // Load opening hours
     const storeDoc = await db.collection('settings').doc('store').get();
-    if (storeDoc.exists && storeDoc.data().hours) {
-      const hours = storeDoc.data().hours;
+    if (storeDoc.exists) {
+      const storeData = storeDoc.data();
       const hoursList = document.getElementById('opening-hours-list');
       hoursList.innerHTML = '';
-      
-      const days = [
-        'Sunday', 'Monday', 'Tuesday', 'Wednesday', 
-        'Thursday', 'Friday', 'Saturday'
-      ];
-      
-      days.forEach(day => {
-        if (hours[day]) {
-          hoursList.innerHTML += `
-            <div class="hours-row">
-              <span>${day}</span>
-              <span>${hours[day].open} — ${hours[day].close}</span>
-            </div>
-          `;
-        }
-      });
-    } else {
-      document.getElementById('opening-hours-list').innerHTML = 
-        '<p style="color:#888;font-size:14px;">Hours coming soon!</p>';
+
+      // Check if closed today
+      if (storeData.closedToday) {
+        hoursList.innerHTML = `
+          <div class="hours-row" style="color:#e74c3c;font-weight:700;">
+            <span>Today</span>
+            <span>🔴 Closed Today</span>
+          </div>
+        `;
+      }
+
+      // Show regular hours
+      if (storeData.hours) {
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date().toLocaleDateString('en-US', {weekday: 'long'});
+        
+        days.forEach(day => {
+          if (storeData.hours[day]) {
+            const isToday = day === today;
+            const isClosed = isToday && storeData.closedToday;
+            hoursList.innerHTML += `
+              <div class="hours-row" style="${isToday ? 'font-weight:700;color:#3b1f0e;' : ''}">
+                <span>${day} ${isToday ? '(Today)' : ''}</span>
+                <span>${isClosed ? '🔴 Closed' : `${storeData.hours[day].open} — ${storeData.hours[day].close}`}</span>
+              </div>
+            `;
+          }
+        });
+      } else {
+        hoursList.innerHTML += '<p style="color:#888;font-size:14px;">Hours coming soon!</p>';
+      }
     }
 
   } catch (error) {
