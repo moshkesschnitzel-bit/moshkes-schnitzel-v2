@@ -30,9 +30,8 @@ async function loadContactInfo() {
       // Check if closed today
       if (storeData.closedToday) {
         hoursList.innerHTML = `
-          <div class="hours-row" style="color:#e74c3c;font-weight:700;">
-            <span>Today</span>
-            <span>🔴 Closed Today</span>
+          <div class="hours-row" style="color:#e74c3c;font-weight:700;background:#fff0f0;padding:10px;border-radius:8px;margin-bottom:10px;">
+            <span>🔴 Store is Closed Today</span>
           </div>
         `;
       }
@@ -49,7 +48,7 @@ async function loadContactInfo() {
             hoursList.innerHTML += `
               <div class="hours-row" style="${isToday ? 'font-weight:700;color:#3b1f0e;' : ''}">
                 <span>${day} ${isToday ? '(Today)' : ''}</span>
-                <span>${isClosed || storeData.hours[day].closed ? '🔴 Closed' : `${convertTo12h(storeData.hours[day].open)} — ${convertTo12h(storeData.hours[day].close)}`}</span>
+                <span>${storeData.hours[day].closed ? '🔴 Closed' : `${convertTo12h(storeData.hours[day].open)} — ${convertTo12h(storeData.hours[day].close)}`}</span>
               </div>
             `;
           }
