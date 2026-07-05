@@ -54,6 +54,8 @@ a {
 
 .nav-logo img {
   height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .nav-links {
@@ -2083,3 +2085,48 @@ footer {
                                                           font-size: 22px;
                                                             text-shadow: 1px 1px 5px rgba(0,0,0,0.5);
                                                             }
+
+                                                            /* ===== MOBILE HAMBURGER MENU ===== */
+                                                            .hamburger {
+                                                              display: none;
+                                                                color: var(--cream);
+                                                                  font-size: 24px;
+                                                                    cursor: pointer;
+                                                                    }
+
+                                                                    @media (max-width: 768px) {
+                                                                      .nav-links {
+                                                                          display: none;
+                                                                              position: fixed;
+                                                                                  top: 0;
+                                                                                      right: 0;
+                                                                                          width: 280px;
+                                                                                              height: 100vh;
+                                                                                                  background: var(--dark-brown);
+                                                                                                      flex-direction: column;
+                                                                                                          padding: 80px 30px 30px;
+                                                                                                              z-index: 2000;
+                                                                                                                  box-shadow: -5px 0 20px rgba(0,0,0,0.3);
+                                                                                                                      gap: 10px;
+                                                                                                                        }
+
+                                                                                                                          .nav-links.open {
+                                                                                                                              display: flex;
+                                                                                                                                }
+
+                                                                                                                                  .nav-links a {
+                                                                                                                                      font-size: 18px;
+                                                                                                                                          padding: 12px 0;
+                                                                                                                                              border-bottom: 1px solid rgba(255,255,255,0.1);
+                                                                                                                                                }
+
+                                                                                                                                                  .hamburger {
+                                                                                                                                                      display: block;
+                                                                                                                                                        }
+
+                                                                                                                                                          .nav-icons {
+                                                                                                                                                              display: flex;
+                                                                                                                                                                  align-items: center;
+                                                                                                                                                                      gap: 15px;
+                                                                                                                                                                        }
+                                                                                                                                                                        }
