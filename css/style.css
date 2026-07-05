@@ -60,7 +60,7 @@ a {
 
 .nav-links {
   list-style: none;
-  display: flex;
+  display: none;
   gap: 30px;
 }
 
@@ -117,7 +117,7 @@ a {
 }
 
 .hamburger {
-  display: none;
+  display: block;
   color: var(--cream);
   font-size: 24px;
   cursor: pointer;
