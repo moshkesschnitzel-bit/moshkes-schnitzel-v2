@@ -47,6 +47,11 @@ async function initAdmin() {
   loadStoreStatus();
   loadDashboard();
   loadOrders();
+  // Keep orders listener alive
+  setInterval(() => {
+    const badge = document.getElementById('new-orders-badge');
+    if (!badge) loadOrders();
+  }, 30000);
   loadMenuItems();
   loadCategories();
   loadCustomers();
@@ -149,9 +154,12 @@ function loadOrders() {
     renderOrders(allOrders);
 
     const pending = allOrders.filter(o => o.status === 'pending').length;
-    document.getElementById('new-orders-badge').textContent = pending;
+    const badge = document.getElementById('new-orders-badge');
+    if (badge) badge.textContent = pending > 0 ? pending : '0';
     
     loadDashboard();
+  }, error => {
+    console.log('Orders listener error:', error);
   });
 }
 
