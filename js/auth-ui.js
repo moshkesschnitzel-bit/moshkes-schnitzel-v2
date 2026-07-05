@@ -3,9 +3,12 @@ function updateAuthUI(user) {
   if (!authBtn) return;
   
   if (user) {
+    const initials = user.displayName 
+      ? user.displayName.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase()
+      : user.email[0].toUpperCase();
     authBtn.innerHTML = `
       <div class="user-menu">
-        <span class="user-name-btn">${user.displayName || user.email.split('@')[0]}</span>
+        <span class="user-name-btn">${initials}</span>
         <div class="user-dropdown">
           <p class="user-name">${user.displayName || user.email}</p>
           <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
