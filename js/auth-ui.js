@@ -9,7 +9,7 @@ function updateAuthUI(user) {
         <div class="user-dropdown">
           <p class="user-name">${user.displayName || user.email}</p>
           <a href="profile.html"><i class="fas fa-user"></i> My Profile</a>
-          <a href="profile.html"><i class="fas fa-receipt"></i> Order History</a>
+          <a href="orders.html"><i class="fas fa-receipt"></i> My Orders</a>
           <a href="contact.html"><i class="fas fa-envelope"></i> Contact</a>
           <a href="#" onclick="signOut()"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
         </div>
