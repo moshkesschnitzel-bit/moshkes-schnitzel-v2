@@ -2175,3 +2175,9 @@ footer {
                                                                                                                                                                       gap: 15px;
                                                                                                                                                                         }
                                                                                                                                                                         }
+
+                                                                                                                                                                        @media (max-width: 480px) {
+  .hamburger {
+    display: none !important;
+  }
+}
