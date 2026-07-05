@@ -1,3 +1,11 @@
+function convertTo12h(time24) {
+  if (!time24) return '';
+  const [hours, minutes] = time24.split(':');
+  const h = parseInt(hours);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = h % 12 || 12;
+  return `${h12}:${minutes} ${ampm}`;
+}
 // Load contact info from Firebase
 async function loadContactInfo() {
   try {
@@ -41,7 +49,7 @@ async function loadContactInfo() {
             hoursList.innerHTML += `
               <div class="hours-row" style="${isToday ? 'font-weight:700;color:#3b1f0e;' : ''}">
                 <span>${day} ${isToday ? '(Today)' : ''}</span>
-                <span>${isClosed ? '🔴 Closed' : `${storeData.hours[day].open} — ${storeData.hours[day].close}`}</span>
+                <span>${isClosed || storeData.hours[day].closed ? '🔴 Closed' : `${convertTo12h(storeData.hours[day].open)} — ${convertTo12h(storeData.hours[day].close)}`}</span>
               </div>
             `;
           }

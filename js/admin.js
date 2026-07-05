@@ -588,9 +588,17 @@ function loadHoursEditor(hours) {
   editor.innerHTML = days.map(day => `
     <div class="hours-row-editor">
       <span>${day}</span>
-      <input type="time" id="hours-${day}-open" value="${hours[day]?.open || '09:00'}" />
+      <input type="time" id="hours-${day}-open" value="${hours[day]?.open || '09:00'}" 
+        ${hours[day]?.closed ? 'disabled' : ''} />
       <span>to</span>
-      <input type="time" id="hours-${day}-close" value="${hours[day]?.close || '22:00'}" />
+      <input type="time" id="hours-${day}-close" value="${hours[day]?.close || '22:00'}"
+        ${hours[day]?.closed ? 'disabled' : ''} />
+      <label style="display:flex;align-items:center;gap:5px;font-size:13px;color:#e74c3c;">
+        <input type="checkbox" id="hours-${day}-closed" 
+          ${hours[day]?.closed ? 'checked' : ''}
+          onchange="toggleDayClosed('${day}')" />
+        Closed
+      </label>
     </div>
   `).join('');
 }
@@ -613,9 +621,11 @@ async function saveHours() {
   const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   const hours = {};
   days.forEach(day => {
+    const isClosed = document.getElementById(`hours-${day}-closed`).checked;
     hours[day] = {
       open: document.getElementById(`hours-${day}-open`).value,
-      close: document.getElementById(`hours-${day}-close`).value
+      close: document.getElementById(`hours-${day}-close`).value,
+      closed: isClosed
     };
   });
   await db.collection('settings').doc('store').set({ hours }, { merge: true });
@@ -1080,4 +1090,10 @@ async function toggleClosedToday() {
   await db.collection('settings').doc('store').set({ closedToday }, { merge: true });
   document.getElementById('closed-today-label').textContent = 
     closedToday ? '🔴 Store is closed today' : '🟢 Store is open today';
-}                 
+}
+
+function toggleDayClosed(day) {
+  const isClosed = document.getElementById(`hours-${day}-closed`).checked;
+  document.getElementById(`hours-${day}-open`).disabled = isClosed;
+  document.getElementById(`hours-${day}-close`).disabled = isClosed;
+}
