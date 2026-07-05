@@ -22,9 +22,9 @@ async function loadMenu() {
     
     categoriesSnap.forEach(doc => {
       const btn = document.createElement('button');
-      btn.className = 'filter-btn';
+      btn.className = 'category-pill';
       btn.textContent = doc.data().name;
-      btn.onclick = () => filterCategory(doc.id);
+      btn.onclick = () => filterCategory(doc.id, btn);
       filterContainer.appendChild(btn);
     });
 
@@ -58,22 +58,20 @@ function renderMenu(items) {
   grid.innerHTML = '';
   items.forEach(item => {
     const card = document.createElement('div');
-    card.className = 'menu-card';
+    card.className = `menu-card-new${item.outOfStock ? ' out-of-stock-card' : ''}`;
     card.innerHTML = `
-      <div class="menu-card-img">
-        <img src="${item.image || 'assets/placeholder.jpg'}" alt="${item.name}" />
-        ${item.outOfStock ? '<div class="out-of-stock-badge">Out of Stock</div>' : ''}
-      </div>
-      <div class="menu-card-info">
+      ${item.outOfStock ? '<div class="out-of-stock-overlay">Out of Stock</div>' : ''}
+      <img class="menu-card-new-img" src="${item.image || 'assets/placeholder.jpg'}" alt="${item.name}" />
+      <div class="menu-card-new-info">
         <h3>${item.name}</h3>
         <p>${item.description || ''}</p>
-        <div class="menu-card-bottom">
+        <div class="menu-card-new-bottom">
           <span class="price">₪${item.price}</span>
           ${!item.outOfStock ? 
-            `<button class="btn-add" onclick="openModal('${item.id}')">
-              <i class="fas fa-plus"></i> Add
+            `<button class="btn-add-new-style" onclick="openModal('${item.id}')">
+              + Add
             </button>` : 
-            `<button class="btn-add disabled" disabled>Out of Stock</button>`
+            `<button class="btn-add-new-style disabled" disabled>Out of Stock</button>`
           }
         </div>
       </div>
@@ -83,10 +81,9 @@ function renderMenu(items) {
 }
 
 // Filter by category
-function filterCategory(categoryId) {
-  // Update active button
-  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+function filterCategory(categoryId, btn) {
+  document.querySelectorAll('.category-pill').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
 
   if (categoryId === 'all') {
     renderMenu(allItems);
