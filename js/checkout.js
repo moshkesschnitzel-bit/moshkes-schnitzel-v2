@@ -173,26 +173,31 @@ async function placeOrder() {
     const fullAddress = apt ? `${address}, ${apt}` : address;
     const mapsLink = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}`;
 
-    const orderRef = await db.collection('orders').add({
-      orderNumber,
-      userId: currentUser.uid,
-      customerName: name,
-      customerPhone: phone,
-      customerEmail: currentUser.email,
-      deliveryAddress: fullAddress,
-      mapsLink,
-      notes,
-      items: cart,
-      subtotal: orderSummary.subtotal,
-      deliveryFee: orderSummary.deliveryFee || 0,
-      total: orderSummary.total,
-      paymentMethod: orderSummary.paymentMethod,
-      orderType: orderSummary.orderType,
-      isSplit: orderSummary.isSplit || false,
-      usdTotal: orderSummary.usdTotal || null,
-      status: 'pending',
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    // Only save to Firestore immediately for cash orders
+    // CC orders will be saved after payment confirmation
+    let orderRef = { id: 'pending-' + orderNumber };
+    if (orderSummary.paymentMethod !== 'card') {
+      orderRef = await db.collection('orders').add({
+        orderNumber,
+        userId: currentUser.uid,
+        customerName: name,
+        customerPhone: phone,
+        customerEmail: currentUser.email,
+        deliveryAddress: fullAddress,
+        mapsLink,
+        notes,
+        items: cart,
+        subtotal: orderSummary.subtotal,
+        deliveryFee: orderSummary.deliveryFee || 0,
+        total: orderSummary.total,
+        paymentMethod: orderSummary.paymentMethod,
+        orderType: orderSummary.orderType,
+        isSplit: orderSummary.isSplit || false,
+        usdTotal: orderSummary.usdTotal || null,
+        status: 'pending',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    }
 
     await db.collection('users').doc(currentUser.uid).set({
       name, phone, address: fullAddress
