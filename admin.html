@@ -249,6 +249,17 @@
           </div>
 
           <div class="setting-group">
+            <h4>Delivery Available</h4>
+            <div style="display:flex;align-items:center;gap:15px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="delivery-toggle" onchange="toggleDelivery()" />
+                <span class="slider"></span>
+              </label>
+              <span id="delivery-label" style="font-size:14px;color:#888;">Delivery is available</span>
+            </div>
+          </div>
+
+          <div class="setting-group">
             <h4>Closed Today</h4>
             <div style="display:flex;align-items:center;gap:15px;">
               <label class="toggle-switch">

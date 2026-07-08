@@ -64,6 +64,7 @@ async function initAdmin() {
   loadHeroImage();
   loadCategoryBoxesAdmin();
   loadClosedToday();
+  loadDeliveryStatus();
 }
 
 // ===== NAVIGATION =====
@@ -1104,4 +1105,22 @@ function toggleDayClosed(day) {
   const isClosed = document.getElementById(`hours-${day}-closed`).checked;
   document.getElementById(`hours-${day}-open`).disabled = isClosed;
   document.getElementById(`hours-${day}-close`).disabled = isClosed;
+}
+
+// ===== DELIVERY TOGGLE =====
+async function loadDeliveryStatus() {
+  const doc = await db.collection('settings').doc('store').get();
+  if (doc.exists) {
+    const deliveryAvailable = doc.data().deliveryAvailable !== false;
+    document.getElementById('delivery-toggle').checked = deliveryAvailable;
+    document.getElementById('delivery-label').textContent = 
+      deliveryAvailable ? '🟢 Delivery is available' : '🔴 Delivery is not available';
+  }
+}
+
+async function toggleDelivery() {
+  const deliveryAvailable = document.getElementById('delivery-toggle').checked;
+  await db.collection('settings').doc('store').set({ deliveryAvailable }, { merge: true });
+  document.getElementById('delivery-label').textContent = 
+    deliveryAvailable ? '🟢 Delivery is available' : '🔴 Delivery is not available';
 }

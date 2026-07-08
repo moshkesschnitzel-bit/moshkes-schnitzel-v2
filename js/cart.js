@@ -12,6 +12,19 @@ async function loadCart() {
     if (settingsDoc.exists) {
       deliveryFee = settingsDoc.data().deliveryFee || 0;
       exchangeRate = settingsDoc.data().exchangeRate || 3.7;
+      
+      // Check if delivery is available
+      const deliveryAvailable = settingsDoc.data().deliveryAvailable !== false;
+      if (!deliveryAvailable) {
+        const deliveryBtn = document.querySelector('.order-type-selector .type-btn:first-child');
+        if (deliveryBtn) {
+          deliveryBtn.disabled = true;
+          deliveryBtn.style.opacity = '0.4';
+          deliveryBtn.title = 'Delivery not available right now';
+        }
+        selectOrderType('pickup');
+        orderType = 'pickup';
+      }
     }
 
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
