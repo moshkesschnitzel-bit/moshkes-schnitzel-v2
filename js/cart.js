@@ -16,14 +16,19 @@ async function loadCart() {
       // Check if delivery is available
       const deliveryAvailable = settingsDoc.data().deliveryAvailable !== false;
       if (!deliveryAvailable) {
+        orderType = 'pickup';
         const deliveryBtn = document.querySelector('.order-type-selector .type-btn:first-child');
+        const pickupBtn = document.querySelector('.order-type-selector .type-btn:last-child');
         if (deliveryBtn) {
           deliveryBtn.disabled = true;
           deliveryBtn.style.opacity = '0.4';
+          deliveryBtn.classList.remove('active');
           deliveryBtn.title = 'Delivery not available right now';
         }
-        selectOrderType('pickup');
-        orderType = 'pickup';
+        if (pickupBtn) {
+          pickupBtn.classList.add('active');
+        }
+        updateSummary();
       }
     }
 
