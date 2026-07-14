@@ -67,6 +67,9 @@
         <a href="#" class="nav-item" onclick="showSection('store-settings')">
           <i class="fas fa-store"></i> Store Settings
         </a>
+        <a href="#" class="nav-item" onclick="showSection('popup')">
+          <i class="fas fa-bullhorn"></i> Popup Announcement
+        </a>
         <a href="#" class="nav-item" onclick="showSection('hero-image')">
           <i class="fas fa-image"></i> Hero Image
         </a>
@@ -278,6 +281,78 @@
             </button>
           </div>
 
+        </div>
+      </section>
+
+      <!-- POPUP ANNOUNCEMENT SECTION -->
+      <section id="section-popup" class="admin-section">
+        <h3>Popup Announcement</h3>
+        <div class="settings-card">
+          <div class="setting-group">
+            <h4>Enable Popup</h4>
+            <div style="display:flex;align-items:center;gap:15px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="popup-toggle" onchange="togglePopup()" />
+                <span class="slider"></span>
+              </label>
+              <span id="popup-status-label" style="font-size:14px;color:#888;">Popup is off</span>
+            </div>
+          </div>
+
+          <div class="setting-group">
+            <h4>Popup Message</h4>
+            <textarea id="popup-message" placeholder="e.g. Today we are closed due to..." 
+              style="width:100%;height:100px;padding:12px;border:2px solid #eee;
+              border-radius:10px;font-family:'Poppins',sans-serif;font-size:14px;
+              outline:none;resize:none;"></textarea>
+          </div>
+
+          <div class="setting-group">
+            <h4>Text Color</h4>
+            <input type="color" id="popup-text-color" value="#ffffff" 
+              style="width:60px;height:40px;border:none;cursor:pointer;border-radius:8px;" />
+          </div>
+
+          <div class="setting-group">
+            <h4>Background Color</h4>
+            <input type="color" id="popup-bg-color" value="#c0392b"
+              style="width:60px;height:40px;border:none;cursor:pointer;border-radius:8px;" />
+          </div>
+
+          <div class="setting-group">
+            <h4>Font Style</h4>
+            <select id="popup-font" style="width:100%;padding:12px;border:2px solid #eee;
+              border-radius:10px;font-family:'Poppins',sans-serif;outline:none;">
+              <option value="Poppins">Poppins (Regular)</option>
+              <option value="Playfair Display">Playfair Display (Elegant)</option>
+              <option value="Georgia">Georgia (Classic)</option>
+              <option value="Arial">Arial (Simple)</option>
+              <option value="Courier New">Courier New (Typewriter)</option>
+            </select>
+          </div>
+
+          <div class="setting-group">
+            <h4>Font Size</h4>
+            <select id="popup-font-size" style="width:100%;padding:12px;border:2px solid #eee;
+              border-radius:10px;font-family:'Poppins',sans-serif;outline:none;">
+              <option value="14px">Small</option>
+              <option value="18px" selected>Medium</option>
+              <option value="24px">Large</option>
+              <option value="32px">Extra Large</option>
+            </select>
+          </div>
+
+          <div class="setting-group">
+            <h4>Preview</h4>
+            <div id="popup-preview" style="padding:20px;border-radius:10px;
+              background:#c0392b;color:white;text-align:center;position:relative;">
+              <span id="popup-preview-text">Your message will appear here</span>
+            </div>
+          </div>
+
+          <button class="btn-primary-full" onclick="savePopupSettings()">
+            <i class="fas fa-save"></i> Save Popup Settings
+          </button>
         </div>
       </section>
 

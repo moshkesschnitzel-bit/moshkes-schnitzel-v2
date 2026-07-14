@@ -65,6 +65,7 @@ async function initAdmin() {
   loadCategoryBoxesAdmin();
   loadClosedToday();
   loadDeliveryStatus();
+  loadPopupSettings();
 }
 
 // ===== NAVIGATION =====
@@ -1123,4 +1124,65 @@ async function toggleDelivery() {
   await db.collection('settings').doc('store').set({ deliveryAvailable }, { merge: true });
   document.getElementById('delivery-label').textContent = 
     deliveryAvailable ? '🟢 Delivery is available' : '🔴 Delivery is not available';
+}
+
+// ===== POPUP ANNOUNCEMENT =====
+async function loadPopupSettings() {
+  const doc = await db.collection('settings').doc('popup').get();
+  if (doc.exists) {
+    const data = doc.data();
+    document.getElementById('popup-toggle').checked = data.enabled || false;
+    document.getElementById('popup-status-label').textContent = 
+      data.enabled ? '🟢 Popup is ON' : '⚫ Popup is off';
+    document.getElementById('popup-message').value = data.message || '';
+    document.getElementById('popup-text-color').value = data.textColor || '#ffffff';
+    document.getElementById('popup-bg-color').value = data.bgColor || '#c0392b';
+    document.getElementById('popup-font').value = data.font || 'Poppins';
+    document.getElementById('popup-font-size').value = data.fontSize || '18px';
+    updatePopupPreview();
+  }
+
+  // Live preview updates
+  document.getElementById('popup-message').addEventListener('input', updatePopupPreview);
+  document.getElementById('popup-text-color').addEventListener('input', updatePopupPreview);
+  document.getElementById('popup-bg-color').addEventListener('input', updatePopupPreview);
+  document.getElementById('popup-font').addEventListener('change', updatePopupPreview);
+  document.getElementById('popup-font-size').addEventListener('change', updatePopupPreview);
+}
+
+function updatePopupPreview() {
+  const preview = document.getElementById('popup-preview');
+  const text = document.getElementById('popup-preview-text');
+  const message = document.getElementById('popup-message').value || 'Your message will appear here';
+  const textColor = document.getElementById('popup-text-color').value;
+  const bgColor = document.getElementById('popup-bg-color').value;
+  const font = document.getElementById('popup-font').value;
+  const fontSize = document.getElementById('popup-font-size').value;
+
+  preview.style.background = bgColor;
+  text.style.color = textColor;
+  text.style.fontFamily = font;
+  text.style.fontSize = fontSize;
+  text.textContent = message;
+}
+
+async function togglePopup() {
+  const enabled = document.getElementById('popup-toggle').checked;
+  await db.collection('settings').doc('popup').set({ enabled }, { merge: true });
+  document.getElementById('popup-status-label').textContent = 
+    enabled ? '🟢 Popup is ON' : '⚫ Popup is off';
+}
+
+async function savePopupSettings() {
+  const data = {
+    enabled: document.getElementById('popup-toggle').checked,
+    message: document.getElementById('popup-message').value,
+    textColor: document.getElementById('popup-text-color').value,
+    bgColor: document.getElementById('popup-bg-color').value,
+    font: document.getElementById('popup-font').value,
+    fontSize: document.getElementById('popup-font-size').value
+  };
+
+  await db.collection('settings').doc('popup').set(data);
+  alert('✅ Popup settings saved!');
 }
