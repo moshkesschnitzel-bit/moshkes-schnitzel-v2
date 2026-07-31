@@ -28,9 +28,9 @@ exports.handler = async (event) => {
     let isOpen = true;
     let reason = '';
 
-    if (data.closedToday === true) {
+    if (data.isOpen === false) {
       isOpen = false;
-      reason = 'The store is closed today.';
+      reason = 'The store is closed right now.';
     } else {
       const todayHours = data.hours?.[currentDay];
       if (!todayHours || todayHours.closed === true) {
