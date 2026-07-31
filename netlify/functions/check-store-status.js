@@ -14,6 +14,9 @@ const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 exports.handler = async (event) => {
   try {
+    const body = JSON.parse(event.body);
+    const toolCallId = body.message?.toolCalls?.[0]?.id;
+
     const doc = await db.collection('settings').doc('store').get();
     const data = doc.data();
 
@@ -47,7 +50,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify({
         results: [{
-          toolCallId: event.toolCallId || 'check_store_status',
+          toolCallId: toolCallId,
           result: JSON.stringify({
             isOpen: isOpen,
             reason: reason,
