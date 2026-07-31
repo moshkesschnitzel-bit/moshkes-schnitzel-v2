@@ -44,9 +44,10 @@ exports.handler = async (event) => {
       orderId: `phone-${orderNumber}`,
       paymentMethod: 'phone',
       paymentStatus: 'pending',
-      status: 'ready',
+      status: 'preparing',
       isSplit: false,
-      source: 'phone-call'
+      source: 'phone-call',
+      orderSource: 'Phone Order'
     };
 
     await db.collection('orders').add(orderData);
