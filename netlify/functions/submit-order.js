@@ -17,7 +17,8 @@ exports.handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body);
-    const args = body.message?.toolCalls?.[0]?.function?.arguments || body;
+    const rawArgs = body.message?.toolCalls?.[0]?.function?.arguments;
+const args = typeof rawArgs === 'string' ? JSON.parse(rawArgs) : (rawArgs || body);
 
     const items = (args.items || []).map(item => ({
       name: item.name,
