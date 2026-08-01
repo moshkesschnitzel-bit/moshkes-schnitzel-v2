@@ -34,7 +34,7 @@ const args = typeof rawArgs === 'string' ? JSON.parse(rawArgs) : (rawArgs || bod
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       customerName: args.customerName || '',
       customerPhone: args.customerPhone || '',
-      customerEmail: '',
+      customerEmail: 'Phone Order',
       orderType: args.orderType || 'pickup',
       deliveryAddress: args.deliveryAddress || '',
       deliveryFee: args.deliveryFee || 0,
