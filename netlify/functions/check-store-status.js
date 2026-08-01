@@ -37,7 +37,14 @@ exports.handler = async (event) => {
         isOpen = false;
         reason = `The store is closed on ${currentDay}.`;
       } else {
-        if (currentTime < todayHours.open || currentTime > todayHours.close) {
+        const crossesMidnight = todayHours.close < todayHours.open;
+        let withinHours;
+        if (crossesMidnight) {
+          withinHours = currentTime >= todayHours.open || currentTime <= todayHours.close;
+        } else {
+          withinHours = currentTime >= todayHours.open && currentTime <= todayHours.close;
+        }
+        if (!withinHours) {
           isOpen = false;
           reason = `The store is closed right now. Hours today are ${todayHours.open} to ${todayHours.close}.`;
         }
