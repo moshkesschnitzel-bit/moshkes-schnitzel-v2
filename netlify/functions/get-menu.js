@@ -28,12 +28,19 @@ exports.handler = async (event) => {
       }
     });
 
+    const categoriesSnapshot = await db.collection('categories').get();
+    const categoryNames = {};
+    categoriesSnapshot.forEach(doc => {
+      categoryNames[doc.id] = (doc.data().name || '').toLowerCase();
+    });
+
     const snapshot = await db.collection('menuItems').get();
     const items = [];
 
     snapshot.forEach(doc => {
       const d = doc.data();
-      const isDrink = (d.categoryId || '').toLowerCase().includes('drink') || (d.name || '').toLowerCase().includes('coke') || (d.name || '').toLowerCase().includes('tea');
+      const catName = categoryNames[d.categoryId] || '';
+      const isDrink = catName.includes('drink');
       const hasOwnToppings = d.toppings && d.toppings.length > 0;
 
       items.push({
@@ -42,7 +49,7 @@ exports.handler = async (event) => {
         available: d.available !== false,
         outOfStock: d.outOfStock === true,
         toppings: isDrink ? [] : (hasOwnToppings ? d.toppings : globalToppings),
-        sauces: isDrink ? [] : (hasOwnToppings ? [] : globalSauces),
+        sauces: isDrink ? [] : globalSauces,
         extras: d.extras || []
       });
     });
