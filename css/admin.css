@@ -464,8 +464,9 @@ input:checked + .slider:before { transform: translateX(28px); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .admin-sidebar { display: none; }
-  .admin-main { margin-left: 0; }
+  #admin-panel { flex-direction: column; }
+  .admin-sidebar { position: static; width: 100%; min-width: 0; height: auto; }
+  .admin-main { margin-left: 0; width: 100%; }
   .admin-topbar { padding: 15px; }
   .admin-section { padding: 15px; }
   .stats-grid { grid-template-columns: 1fr 1fr; }
